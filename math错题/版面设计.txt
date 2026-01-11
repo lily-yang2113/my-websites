@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>谢多多错题本</title>
+    <style>
+        :root {
+            /* 马卡龙色系配色方案 - 护眼低饱和度 */
+            --main-bg: #F7F7E8; /* 米杏白（主背景） */
+            --sage-green: #A8C69F; /* 鼠尾草绿（装饰） */
+            --sky-blue: #B5D5D9; /* 柔和天蓝（数学/知识库） */
+            --cream-pink: #F4BC9C; /* 奶油橘粉（英语） */
+            --lavender: #C5BEE2; /* 丁香淡紫（其他） */
+            --text-dark: #2D5A4C; /* 深森林绿（标题/正文） */
+            --matcha-green: #97B8A0; /* 抹茶绿（按钮/交互） */
+            --text-light: #5A7D72; /* 辅助文字颜色 */
+            --border-color: rgba(45, 90, 76, 0.1); /* 边框颜色 */
+            
+            --border-radius: 16px; /* 增大圆角 */
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 柔和阴影 */
+            --hover-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+            --transition: all 0.2s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: var(--main-bg);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+        
+        /* 顶部标题 - 鼠尾草绿渐变 */
+        .header {
+            background: linear-gradient(135deg, var(--sage-green) 0%, #B8D0B0 100%);
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 10px;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 主功能区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+            padding: 0 5px;
+        }
+        
+        /* 科目按钮 - 马卡龙色系 */
+        .subject-btn {
+            background: var(--card-gradient);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        
+        .subject-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 数学按钮 - 柔和天蓝 */
+        .subject-btn.math {
+            background: linear-gradient(135deg, var(--sky-blue) 0%, #C2E0E3 100%);
+            border-color: rgba(181, 213, 217, 0.3);
+        }
+        
+        /* 英语按钮 - 奶油橘粉 */
+        .subject-btn.english {
+            background: linear-gradient(135deg, var(--cream-pink) 0%, #F5C6A9 100%);
+            border-color: rgba(244, 188, 156, 0.3);
+        }
+        
+        /* 知识库按钮 - 丁香淡紫 */
+        .subject-btn.knowledge {
+            background: linear-gradient(135deg, var(--lavender) 0%, #D1CBE8 100%);
+            border-color: rgba(197, 190, 226, 0.3);
+        }
+        
+        .subject-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .subject-icon {
+            font-size: 2.2rem;
+            height: 50px;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            color: var(--text-dark);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            backdrop-filter: blur(4px);
+        }
+        
+        .subject-info {
+            text-align: left;
+        }
+        
+        .subject-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        
+        .subject-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.3;
+        }
+        
+        /* 进度文字 - 深森林绿 */
+        .subject-progress {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .progress-percent {
+            color: var(--matcha-green);
+            font-weight: 700;
+            margin-left: 5px;
+        }
+        
+        /* 知识库区域 */
+        .knowledge-section {
+            flex-shrink: 0;
+            height: 150px;
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        /* 左侧按钮 - 抹茶绿 */
+        .knowledge-left {
+            flex: 0 0 140px;
+            background: linear-gradient(135deg, var(--matcha-green) 0%, #A8C69F 100%);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-shrink: 0;
+            color: white;
+        }
+        
+        .knowledge-left:active {
+            transform: scale(0.98);
+        }
+        
+        .knowledge-left-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .knowledge-left-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .knowledge-left-desc {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 3px;
+        }
+        
+        /* 右侧内容区 */
+        .knowledge-right {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(4px);
+        }
+        
+        .knowledge-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            white-space: pre-line;
+        }
+        
+        .knowledge-category {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+        
+        .knowledge-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+            
+            .header {
+                height: 50px;
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+            
+            .subject-btn {
+                padding: 15px;
+            }
+            
+            .subject-icon {
+                font-size: 2rem;
+                height: 45px;
+                width: 45px;
+            }
+            
+            .knowledge-section {
+                height: 130px;
+            }
+            
+            .knowledge-left {
+                flex: 0 0 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部标题 -->
+    <div class="header">📚 谢多多专属错题本</div>
+    
+    <!-- 主功能区域 -->
+    <div class="main-content">
+        <!-- 数学练习 -->
+        <div class="subject-btn math" onclick="startPractice('math')">
+            <div class="subject-left">
+                <div class="subject-icon">🧮</div>
+                <div class="subject-info">
+                    <div class="subject-name">数学练习</div>
+                    <div class="subject-desc">每日8题 · 巩固易错点</div>
+                </div>
+            </div>
+            <div class="subject-progress">
+                已攻克 <span id="math-mastered">0</span>/<span id="math-total">75</span>题
+                <span class="progress-percent" id="math-percent">0%</span>
+            </div>
+        </div>
+        
+        <!-- 英语词性 -->
+        <div class="subject-btn english" onclick="showSpeechSelection()">
+            <div class="subject-left">
+                <div class="subject-icon">🌐</div>
+                <div class="subject-info">
+                    <div class="subject-name">英语词性</div>
+                    <div class="subject-desc">8大词性专项 · 逐个击破</div>
+                </div>
+            </div>
+            <div class="subject-progress">
+                已掌握 <span id="english-mastered">0</span>/<span id="english-total">8</span>个
+                <span class="progress-percent" id="english-percent">0%</span>
+            </div>
+        </div>
+        
+        <!-- 知识库 -->
+        <div class="subject-btn knowledge" onclick="showKnowledge()">
+            <div class="subject-left">
+                <div class="subject-icon">📖</div>
+                <div class="subject-info">
+                    <div class="subject-name">知识库</div>
+                    <div class="subject-desc">必备公式 · 随时查看</div>
+                </div>
+            </div>
+            <div class="subject-progress">
+                共 <span id="knowledge-count">16</span> 条
+            </div>
+        </div>
+        
+        <!-- 知识展示区 -->
+        <div class="knowledge-section">
+            <div class="knowledge-left" onclick="showRandomKnowledge()">
+                <div class="knowledge-left-icon">📚</div>
+                <div class="knowledge-left-title">知识库</div>
+                <div class="knowledge-left-desc">点击查看新知识点</div>
+            </div>
+            <div class="knowledge-right" id="knowledge-display">
+                <div class="knowledge-placeholder">
+                    点击左侧按钮查看知识点
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 数据库区域（请在此处粘贴完整数据） =====
+        
+        /* 数学数据库 - 请在此处粘贴 mathQuestions 数组 */
+        const mathQuestions = [
+            // 请粘贴您的75道数学题数据到这里
+        ];
+        
+        /* 英语词性数据库 - 请在此处粘贴 partOfSpeechData 数组 */
+        const partOfSpeechData = [
+            // 请粘贴您的8个词性数据到这里
+        ];
+        
+        /* 必备知识数据库 - 请在此处粘贴 essentialKnowledge 数组 */
+        const essentialKnowledge = [
+            // 请粘贴您的16条知识点数据到这里
+        ];
+        
+        // ==========================================================
+        
+        // 用户答题记录
+        let userProgress = {
+            mathQuestions: {},
+            speechTypes: {},
+            masteredQuestions: [],
+            masteredSpeechTypes: []
+        };
+
+        // ===== 核心功能函数 =====
+        
+        // localStorage 辅助函数
+        function safeLocalStorageGet(key, defaultValue = null) {
+            try {
+                const value = localStorage.getItem(key);
+                return value ? JSON.parse(value) : defaultValue;
+            } catch (error) {
+                return defaultValue;
+            }
+        }
+
+        function safeLocalStorageSet(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+        
+        // 加载用户答题记录
+        function loadUserProgress() {
+            const saved = safeLocalStorageGet('userProgress', {
+                mathQuestions: {},
+                speechTypes: {},
+                masteredQuestions: [],
+                masteredSpeechTypes: []
+            });
+            userProgress = saved;
+        }
+        
+        // 保存用户答题记录
+        function saveUserProgress() {
+            safeLocalStorageSet('userProgress', userProgress);
+        }
+        
+        // 更新数学进度
+        function updateMathProgress() {
+            const masteredCount = userProgress.masteredQuestions.length;
+            const totalQuestions = 75;
+            const progress = (masteredCount / totalQuestions) * 100;
+            
+            document.getElementById('math-mastered').textContent = masteredCount;
+            document.getElementById('math-total').textContent = totalQuestions;
+            document.getElementById('math-percent').textContent = `${Math.round(progress)}%`;
+        }
+        
+        // 更新英语进度
+        function updateEnglishProgress() {
+            const masteredCount = userProgress.masteredSpeechTypes.length;
+            const totalSpeechTypes = 8;
+            const progress = (masteredCount / totalSpeechTypes) * 100;
+            
+            document.getElementById('english-mastered').textContent = masteredCount;
+            document.getElementById('english-total').textContent = totalSpeechTypes;
+            document.getElementById('english-percent').textContent = `${Math.round(progress)}%`;
+        }
+        
+        // 显示随机知识点
+        function showRandomKnowledge() {
+            if (essentialKnowledge.length === 0) {
+                console.error('知识库为空，请添加 essentialKnowledge 数据');
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * essentialKnowledge.length);
+            const knowledge = essentialKnowledge[randomIndex];
+            
+            const displayArea = document.getElementById('knowledge-display');
+            
+            displayArea.innerHTML = `
+                <div class="knowledge-content">${knowledge.text}</div>
+                <div class="knowledge-category">${knowledge.category}</div>
+            `;
+        }
+        
+        // 显示知识库（点击知识库按钮时调用）
+        function showKnowledge() {
+            showRandomKnowledge();
+        }
+        
+        // 开始练习（数学）
+        function startPractice(subject) {
+            console.log(`开始${subject}练习`);
+            
+            if (essentialKnowledge.length === 0) {
+                alert('请先添加数据库内容！');
+                return;
+            }
+            
+            alert(`正在进入${subject === 'math' ? '数学' : '英语'}练习...
+            
+请确保已正确添加数据库内容！`);
+            
+            // 实际项目中这里会加载练习页面
+            // 示例：从 mathQuestions 中随机选8题
+            // const selectedQuestions = getRandomQuestions(mathQuestions, 8);
+        }
+        
+        // 显示词性选择（英语）
+        function showSpeechSelection() {
+            console.log('显示词性选择');
+            
+            if (partOfSpeechData.length === 0) {
+                alert('请先添加英语数据库内容！');
+                return;
+            }
+            
+            alert('正在进入英语词性练习...
+            
+请确保已正确添加 partOfSpeechData 数据库！');
+            
+            // 实际项目中这里会加载词性选择界面
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserProgress();
+            updateMathProgress();
+            updateEnglishProgress();
+            
+            // 更新知识库数量
+            document.getElementById('knowledge-count').textContent = essentialKnowledge.length || 0;
+            
+            // 自动显示第一个知识点
+            if (essentialKnowledge.length > 0) {
+                setTimeout(() => {
+                    showRandomKnowledge();
+                }, 300);
+            }
+            
+            console.log('首页初始化完成');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>谢多多错题本</title>
+    <style>
+        :root {
+            /* 马卡龙色系配色方案 - 护眼低饱和度 */
+            --main-bg: #F7F7E8; /* 米杏白（主背景） */
+            --sage-green: #A8C69F; /* 鼠尾草绿（装饰） */
+            --sky-blue: #B5D5D9; /* 柔和天蓝（数学/知识库） */
+            --cream-pink: #F4BC9C; /* 奶油橘粉（英语） */
+            --lavender: #C5BEE2; /* 丁香淡紫（其他） */
+            --text-dark: #2D5A4C; /* 深森林绿（标题/正文） */
+            --matcha-green: #97B8A0; /* 抹茶绿（按钮/交互） */
+            --text-light: #5A7D72; /* 辅助文字颜色 */
+            --border-color: rgba(45, 90, 76, 0.1); /* 边框颜色 */
+            
+            --border-radius: 16px; /* 增大圆角 */
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 柔和阴影 */
+            --hover-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+            --transition: all 0.2s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: var(--main-bg);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+        
+        /* 顶部标题 - 鼠尾草绿渐变 */
+        .header {
+            background: linear-gradient(135deg, var(--sage-green) 0%, #B8D0B0 100%);
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 10px;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 主功能区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+            padding: 0 5px;
+        }
+        
+        /* 科目按钮 - 马卡龙色系 */
+        .subject-btn {
+            background: var(--card-gradient);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+            -webkit-touch-callout: none;
+            user-select: none;
+            min-height: 70px;
+            position: relative;
+        }
+        
+        .subject-btn:active,
+        .subject-btn.touch-active,
+        .knowledge-left:active,
+        .knowledge-left.touch-active {
+            transform: scale(0.98);
+        }
+        
+        /* 触摸反馈样式 */
+        .subject-btn.touch-active {
+            opacity: 0.85;
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 数学按钮 - 柔和天蓝 */
+        .subject-btn.math {
+            background: linear-gradient(135deg, var(--sky-blue) 0%, #C2E0E3 100%);
+            border-color: rgba(181, 213, 217, 0.3);
+        }
+        
+        /* 英语按钮 - 奶油橘粉 */
+        .subject-btn.english {
+            background: linear-gradient(135deg, var(--cream-pink) 0%, #F5C6A9 100%);
+            border-color: rgba(244, 188, 156, 0.3);
+        }
+        
+        /* 知识库按钮 - 丁香淡紫 */
+        .subject-btn.knowledge {
+            background: linear-gradient(135deg, var(--lavender) 0%, #D1CBE8 100%);
+            border-color: rgba(197, 190, 226, 0.3);
+        }
+        
+        .subject-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .subject-icon {
+            font-size: 2.2rem;
+            height: 50px;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            color: var(--text-dark);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            backdrop-filter: blur(4px);
+        }
+        
+        .subject-info {
+            text-align: left;
+        }
+        
+        .subject-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        
+        .subject-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.3;
+        }
+        
+        /* 进度文字 - 深森林绿 */
+        .subject-progress {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .progress-percent {
+            color: var(--matcha-green);
+            font-weight: 700;
+            margin-left: 5px;
+        }
+        
+        /* 知识库区域 */
+        .knowledge-section {
+            flex-shrink: 0;
+            height: 150px;
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        /* 左侧按钮 - 抹茶绿 */
+        .knowledge-left {
+            flex: 0 0 140px;
+            background: linear-gradient(135deg, var(--matcha-green) 0%, #A8C69F 100%);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-shrink: 0;
+            color: white;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+            -webkit-touch-callout: none;
+            user-select: none;
+            position: relative;
+        }
+
+        .knowledge-left:active {
+            transform: scale(0.98);
+        }
+        
+        /* 触摸反馈样式 */
+        .knowledge-left.touch-active {
+            opacity: 0.85;
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .knowledge-left-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .knowledge-left-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .knowledge-left-desc {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 3px;
+        }
+        
+        /* 右侧内容区 */
+        .knowledge-right {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(4px);
+        }
+        
+        .knowledge-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            white-space: pre-line;
+        }
+        
+        .knowledge-category {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+        
+        .knowledge-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* 为触摸设备优化 */
+        @media (pointer: coarse) {
+            .subject-btn, .knowledge-left {
+                min-height: 70px;
+            }
+            
+            .subject-btn {
+                padding: 20px 18px;
+            }
+            
+            .knowledge-left {
+                flex: 0 0 130px;
+            }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+            
+            .header {
+                height: 50px;
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+            
+            .subject-btn {
+                padding: 15px;
+            }
+            
+            .subject-icon {
+                font-size: 2rem;
+                height: 45px;
+                width: 45px;
+            }
+            
+            .knowledge-section {
+                height: 130px;
+            }
+            
+            .knowledge-left {
+                flex: 0 0 120px;
+            }
+        }
+        
+        /* 词性选择页面 */
+        .speech-selection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+            overflow-y: auto;
+        }
+        
+        .speech-guide {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 15px 15px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .guide-title {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .guide-content {
+            font-size: 0.95rem;
+            color: var(--gray-color);
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .guide-tip {
+            display: inline-block;
+            background: rgba(255, 209, 102, 0.2);
+            color: #d6a214;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        /* 词性学习卡片 */
+        .part-of-speech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 0 15px 20px;
+            padding-bottom: 20px;
+        }
+        
+        .speech-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .speech-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .speech-card.selected {
+            border-color: var(--secondary-color);
+            background: rgba(151, 184, 160, 0.05);
+        }
+        
+        .speech-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            height: 60px;
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #FF4D6D 100%);
+            color: white;
+        }
+        
+        .speech-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+        }
+        
+        .speech-desc {
+            font-size: 0.8rem;
+            color: var(--gray-color);
+            margin-bottom: 8px;
+        }
+        
+        .speech-mastery {
+            font-size: 0.8rem;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        /* 简洁的练习区域 */
+        .practice-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            flex-direction: column;
+            z-index: 20;
+        }
+        
+        .question-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--gray-light);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .question-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .question-type {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: rgba(151, 184, 160, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .question-difficulty {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .difficulty-easy {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success-color);
+        }
+        
+        .difficulty-medium {
+            background: rgba(255, 209, 102, 0.2);
+            color: #d6a214;
+        }
+        
+        .difficulty-hard {
+            background: rgba(239, 71, 111, 0.2);
+            color: var(--danger-color);
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: var(--dark-color);
+            margin-bottom: 25px;
+        }
+        
+        .options-container {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .option-btn {
+            padding: 18px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            background: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f8f9ff;
+        }
+        
+        .option-btn.selected {
+            border-color: var(--primary-color);
+            background: rgba(93, 95, 239, 0.1);
+        }
+        
+        .option-btn.correct {
+            border-color: var(--success-color);
+            background: rgba(78, 205, 196, 0.15);
+            animation: correctPulse 0.6s ease;
+        }
+        
+        .option-btn.wrong {
+            border-color: var(--danger-color);
+            background: rgba(239, 71, 111, 0.1);
+            animation: wrongShake 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); box-shadow: 0 0 15px rgba(120, 200, 150, 0.3); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .option-label {
+            background: var(--gray-light);
+            color: var(--dark-color);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .option-btn.selected .option-label {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .option-btn.correct .option-label {
+            background:  #4CAF50;
+            color: white;
+        }
+        
+        .option-btn.wrong .option-label {
+            background: #EF476F;
+            color: white;
+        }
+        
+        .explanation-area {
+            background: rgba(151, 184, 160, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .explanation-area.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .explanation-title {
+            color: var(--matcha-green);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .explanation-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        
+        .action-bar {
+            background: white;
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+            user-select: none;
+        }
+        
+        .action-btn.primary {
+            background: var(--matcha-green);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            background: #86a38d;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: var(--border-color);
+            color: var(--text-dark);
+        }
+        
+       .action-btn.secondary:hover {
+            background: rgba(45, 90, 76, 0.15);
+        }
+        
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* 简洁的完成界面 */
+        .completion-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            z-index: 30;
+        }
+        
+        .completion-icon {
+            font-size: 4.5rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        .completion-title {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .completion-message {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .completion-stats {
+            background: rgba(151, 184, 160, 0.05);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+        
+        .completion-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .completion-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+        }
+        
+        .stat-value {
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部标题 -->
+    <div class="header">📚 谢多多专属错题本</div>
+    
+    <!-- 主功能区域 -->
+    <div class="main-content">
+        <!-- 数学练习 -->
+        <div class="subject-btn math" data-action="math">
+            <div class="subject-left">
+                <div class="subject-icon">🧮</div>
+                <div class="subject-info">
+                    <div class="subject-name">数学练习</div>
+                    <div class="subject-desc">每日8题 · 巩固易错点</div>
+                </div>
+            </div>
+            <div class="subject-progress">
+                已攻克 <span id="math-mastered">0</span>/<span id="math-total">75</span>题
+                <span class="progress-percent" id="math-percent">0%</span>
+            </div>
+        </div>
+        
+        <!-- 英语词性 -->
+        <div class="subject-btn english" data-action="english">
+            <div class="subject-left">
+                <div class="subject-icon">🌐</div>
+                <div class="subject-info">
+                    <div class="subject-name">英语词性</div>
+                    <div class="subject-desc">8大词性专项 · 逐个击破</div>
+                </div>
+            </div>
+            <div class="subject-progress">
+                已掌握 <span id="english-mastered">0</span>/<span id="english-total">8</span>个
+                <span class="progress-percent" id="english-percent">0%</span>
+            </div>
+        </div>
+        
+        <!-- 知识库 -->
+        <div class="subject-btn knowledge" data-action="knowledge">
+            <div class="subject-left">
+                <div class="subject-icon">📖</div>
+                <div class="subject-info">
+                    <div class="subject-name">知识库</div>
+                    <div class="subject-desc">必背公式 · 随时查看</div>
+                </div>
+            </div>
+            <div class="subject-progress">
+                共 <span id="knowledge-count">16</span> 条
+            </div>
+        </div>
+        
+        <!-- 知识展示区 -->
+        <div class="knowledge-section">
+            <div class="knowledge-left" data-action="random-knowledge">
+                <div class="knowledge-left-icon">📚</div>
+                <div class="knowledge-left-title">知识库</div>
+                <div class="knowledge-left-desc">点击查看新知识点</div>
+            </div>
+            <div class="knowledge-right" id="knowledge-display">
+                <div class="knowledge-placeholder">
+                    点击左侧按钮查看知识点
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 词性选择页面 -->
+    <div class="speech-selection" id="speech-selection">
+        <div class="speech-guide">
+            <div class="guide-title">🎯 学习目标：掌握英语八大词性</div>
+            <div class="guide-content">
+                点击下方词性卡片开始学习。每个词性包含8道练习题，答对3次即可掌握该词性。
+            </div>
+            <div class="guide-tip">💡 提示：每天建议学习2-3个词性，循序渐进效果更好</div>
+        </div>
+        
+        <div class="part-of-speech-grid" id="part-of-speech-grid">
+            <!-- 词性卡片将通过JS动态生成 -->
+        </div>
+    </div>
+    
+    <!-- 简洁的练习区域 -->
+    <div class="practice-area" id="practice-area">
+        <div class="question-container" id="question-container">
+            <!-- 题目将通过JS动态生成 -->
+        </div>
+        
+        <div class="action-bar">
+            <button class="action-btn secondary" id="prev-btn" disabled>
+                <i class="fas fa-arrow-left"></i> 上一题
+            </button>
+            <button class="action-btn primary" id="submit-btn">
+                提交答案
+            </button>
+            <button class="action-btn primary" id="next-btn" style="display: none;">
+                下一题 <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 简洁的完成界面 -->
+    <div class="completion-screen" id="completion-screen">
+        <div class="completion-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <h2 class="completion-title" id="completion-title">今日练习完成！</h2>
+        <p class="completion-message" id="completion-message">你真棒！坚持就是胜利！</p>
+        
+        <div class="completion-stats">
+            <div class="completion-stat">
+                <span class="stat-label">正确题数</span>
+                <span class="stat-value" id="final-correct">0</span>
+            </div>
+            <div class="completion-stat">
+                <span class="stat-label">总题数</span>
+                <span class="stat-value" id="final-total">0</span>
+            </div>
+            <div class="completion-stat">
+                <span class="stat-label">正确率</span>
+                <span class="stat-value" id="final-accuracy">0%</span>
+            </div>
+            <div class="completion-stat">
+                <span class="stat-label">今日攻克</span>
+                <span class="stat-value" id="final-mastered">0题</span>
+            </div>
+        </div>
+        
+        <button class="action-btn primary" id="return-btn">
+            <i class="fas fa-home"></i> 返回首页
+        </button>
+        <button class="action-btn secondary" id="review-btn" style="margin-top: 12px;">
+            <i class="fas fa-redo"></i> 复习错题
+        </button>
+    </div>
+
+    <script>
+        // 数学题库 - 包含75道题
+        const mathQuestions = [
+            {
+                id: 1,
+                question: '（）米比15米多1/3米；',
+                options: ['15又1/3米', '20米', '5米', '10米'],
+                correct: 0,
+                explanation: '15米 + 1/3米 = 15又1/3米。注意：这里的1/3米是具体的长度，不是比例。',
+                difficulty: 'easy'
+            },
+            {
+                id: 2,
+                question: '8吨比（）吨少1/4。',
+                options: ['10吨', '6吨', '32/3吨', '64/7吨'],
+                correct: 2,
+                explanation: '设要求的吨数为x，则x × (1 - 1/4) = 8，x = 8 ÷ 3/4 = 8 × 4/3 = 32/3吨。',
+                difficulty: 'medium'
+            },
+            {
+                id: 3,
+                question: '一批产品的合格率是90%，合格的比不合格的多（）%。',
+                options: ['80%', '90%', '800%', '900%'],
+                correct: 2,
+                explanation: '合格率90%，不合格率10%，合格的是不合格的9倍，所以多(9-1)×100% = 800%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 4,
+                question: '甲的2/5相当于乙的2/3，甲是乙的（）%。',
+                options: ['60%', '120%', '166.67%', '66.67%'],
+                correct: 2,
+                explanation: '设甲为x，乙为y，则(2/5)x = (2/3)y，解得x/y = (2/3) ÷ (2/5) = 5/3 ≈ 166.67%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 5,
+                question: '正方形的边长为5厘米，若边长增加1/5，周长增长（）%，面积增加（）%。',
+                options: ['20%, 44%', '25%, 56.25%', '20%, 56.25%', '25%, 44%'],
+                correct: 0,
+                explanation: '原边长5cm，增加1/5后为6cm。原周长20cm，现周长24cm，增长20%；原面积25cm²，现面积36cm²，增长44%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 6,
+                question: '甲乙两人原有钱数的比是3:4，乙后来给甲20元，这时甲的钱是乙的4/5，原来甲有（）元。',
+                options: ['120元', '180元', '240元', '300元'],
+                correct: 1,
+                explanation: '设原来甲有3x元，乙有4x元。乙给甲20元后：甲有3x+20，乙有4x-20。(3x+20)/(4x-20) = 4/5，解得x=60，所以甲原有3×60=180元。',
+                difficulty: 'hard'
+            },
+            {
+                id: 7,
+                question: '0.125÷8=',
+                options: ['0.015625', '0.15625', '1.5625', '0.0015625'],
+                correct: 0,
+                explanation: '0.125÷8 = 0.015625。或者：0.125 = 1/8，所以1/8 ÷ 8 = 1/64 = 0.015625。',
+                difficulty: 'easy'
+            },
+            {
+                id: 8,
+                question: '2.2×125% + 7.8÷80%=',
+                options: ['10.5', '11.25', '12.5', '13.75'],
+                correct: 2,
+                explanation: '2.2×1.25 = 2.75；7.8÷0.8 = 9.75；2.75 + 9.75 = 12.5。',
+                difficulty: 'medium'
+            },
+            {
+                id: 9,
+                question: '计算：17×（3/14 - 2/17）×14=',
+                options: ['-5', '5', '17', '14'],
+                correct: 1,
+                explanation: '原式 = 17×14×3/14 - 17×14×2/17 = 17×3 - 14×2 = 51 - 28 = 5。',
+                difficulty: 'medium'
+            },
+            {
+                id: 10,
+                question: '张老师存了20000元，定期两年，两年的存款年利率为2.1%，到期时一共可取回本息多少元？',
+                options: ['20840元', '20842元', '20844元', '20846元'],
+                correct: 0,
+                explanation: '利息 = 20000×2.1%×2 = 840元，本息 = 20000+840 = 20840元。',
+                difficulty: 'easy'
+            },
+            {
+                id: 11,
+                question: '六年级原来男生人数占全年级人数的45%，后来又转进15名男生，现在男生人数占全年级的48%，现在全年级有多少人？',
+                options: ['450人', '500人', '550人', '600人'],
+                correct: 1,
+                explanation: '设原来全年级有x人，则0.45x+15=0.48(x+15)，解得x=500，现在全年级有500+15=515人。',
+                difficulty: 'hard'
+            },
+            {
+                id: 12,
+                question: '计算：3/7×1/4+25%×2/7+0.25×1/7=',
+                options: ['0.25', '0.3', '3/14', '5/14'],
+                correct: 2,
+                explanation: '25% = 0.25 = 1/4，原式 = (3/7+2/7+1/7)×1/4 = 6/7×1/4 = 6/28 = 3/14。',
+                difficulty: 'medium'
+            },
+            {
+                id: 13,
+                question: '六（2）班有男生20人，女生25人，女生人数与男生人数的比是（）；男生人数约占全班人数的（）%；男生人数比女生少（）%；女生人数比男生人数多（）%。',
+                options: ['5:4, 44.4%, 20%, 25%', '5:4, 44.4%, 25%, 20%', '4:5, 44.4%, 20%, 25%', '5:4, 55.6%, 20%, 25%'],
+                correct: 0,
+                explanation: '女生:男生=25:20=5:4；全班45人，男生占20/45≈44.4%；男生比女生少(25-20)/25=20%；女生比男生多(25-20)/20=25%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 14,
+                question: '一种油菜籽的出油率为24%～32%，200千克这样的油菜籽最少可以榨油（）千克，如果要榨96千克油，最少需要（）千克油菜籽。',
+                options: ['48kg, 400kg', '48kg, 300kg', '64kg, 400kg', '64kg, 300kg'],
+                correct: 1,
+                explanation: '最少出油率24%，200kg最少榨油200×24%=48kg；榨96kg油，按最高出油率32%计算，最少需要96÷32%=300kg。',
+                difficulty: 'medium'
+            },
+            {
+                id: 15,
+                question: '72吨比（）吨多12.5%。',
+                options: ['64吨', '80吨', '81吨', '84吨'],
+                correct: 0,
+                explanation: '设要求的吨数为x，则x×(1+12.5%)=72，x=72÷1.125=64吨。',
+                difficulty: 'medium'
+            },
+            {
+                id: 16,
+                question: '一个电饭煲的原价220元，现价160元，电饭煲的价格降低了百分之几？',
+                options: ['约27.27%', '约31.25%', '约37.5%', '约45%'],
+                correct: 0,
+                explanation: '降价金额=220-160=60元，降低百分比=60÷220≈0.2727=27.27%。',
+                difficulty: 'easy'
+            },
+            {
+                id: 17,
+                question: '小红读一本书，第一天看了全书的20%，第二天看了全书的1/4，还剩22页，这本书共有多少页？',
+                options: ['40页', '44页', '48页', '50页'],
+                correct: 0,
+                explanation: '两天看了20%+25%=45%，剩下55%对应22页，全书=22÷55%=40页。',
+                difficulty: 'medium'
+            },
+            {
+                id: 18,
+                question: '有含盐16%的盐水40千克，蒸发多少千克水后可将浓度提到20%？',
+                options: ['8千克', '9千克', '10千克', '12千克'],
+                correct: 0,
+                explanation: '盐的质量=40×16%=6.4千克，蒸发后盐水质量=6.4÷20%=32千克，蒸发水=40-32=8千克。',
+                difficulty: 'medium'
+            },
+            {
+                id: 19,
+                question: '在一个棱长为50cm的正方体容器中盛满水，垂直插入一根底面积为30平方厘米、高为60厘米的长方体铁棒，会溢出（）毫升水。',
+                options: ['900', '1500', '1800', '2000'],
+                correct: 1,
+                explanation: '铁棒浸入水中的高度为50cm，浸入体积=30×50=1500cm³=1500毫升。',
+                difficulty: 'hard'
+            },
+            {
+                id: 20,
+                question: '一个长方形铁盒，外包装注明尺寸是20cm×12cm×10cm，这个纸盒体积是（）dm³，表面积是（）dm²。',
+                options: ['2.4, 11.2', '2.4, 11.6', '2.4, 12.4', '2.4, 12.8'],
+                correct: 0,
+                explanation: '体积=20×12×10=2400cm³=2.4dm³；表面积=2×(20×12+20×10+12×10)=2×560=1120cm²=11.2dm²。',
+                difficulty: 'medium'
+            },
+            {
+                id: 21,
+                question: '一条5/4千米长的路，已经修了1/2千米，再修（）千米，正好修完60%。',
+                options: ['1/4', '3/8', '1/2', '5/8'],
+                correct: 1,
+                explanation: '总长的60%=(5/4)×0.6=0.75千米，已修0.5千米，还需修0.75-0.5=0.25=1/4千米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 22,
+                question: '计算：7/12-3/7-(4/7-7/12)=',
+                options: ['7/6', '5/6', '1', '1/6'],
+                correct: 0,
+                explanation: '原式=7/12-3/7-4/7+7/12=7/12+7/12-(3/7+4/7)=14/12-1=2/12=1/6。',
+                difficulty: 'medium'
+            },
+            {
+                id: 23,
+                question: '(1/2+2/3-5/18)÷1/36=',
+                options: ['28', '32', '36', '40'],
+                correct: 1,
+                explanation: '原式=(9/18+12/18-5/18)÷1/36=16/18×36=16×2=32。',
+                difficulty: 'medium'
+            },
+            {
+                id: 24,
+                question: '计算下面图形的表面积（图形：下方是长6cm、宽3cm、高4cm的长方体，上方是棱长2cm的正方体）。',
+                options: ['124cm²', '136cm²', '148cm²', '160cm²'],
+                correct: 1,
+                explanation: '长方体表面积=2×(6×3+6×4+3×4)=108cm²，正方体表面积=6×4=24cm²，减去重叠部分2×2×2=8cm²，总表面积=108+24-8=124cm²。',
+                difficulty: 'hard'
+            },
+            {
+                id: 25,
+                question: '一瓶油用去1/3后，余下的油连瓶重900克，再用去余下的3/4后，连瓶重450克。瓶中原有油多少克？',
+                options: ['1200克', '1350克', '1500克', '1800克'],
+                correct: 1,
+                explanation: '设原有油x克，瓶重y克。第一次用去后：(2/3)x+y=900；第二次用去后：(2/3)×(1/4)x+y=450。解得x=1350克。',
+                difficulty: 'hard'
+            },
+            {
+                id: 26,
+                question: '0.1³=（）',
+                options: ['0.001', '0.01', '0.1', '1'],
+                correct: 0,
+                explanation: '0.1³=0.1×0.1×0.1=0.001。',
+                difficulty: 'easy'
+            },
+            {
+                id: 27,
+                question: '计算：5/13×18+5/13×22-5/13=',
+                options: ['5', '10', '15', '20'],
+                correct: 2,
+                explanation: '原式=5/13×(18+22-1)=5/13×39=5×3=15。',
+                difficulty: 'medium'
+            },
+            {
+                id: 28,
+                question: '4.09立方分米=（）毫升',
+                options: ['409', '4090', '40900', '409000'],
+                correct: 1,
+                explanation: '1立方分米=1000毫升，4.09立方分米=4090毫升。',
+                difficulty: 'easy'
+            },
+            {
+                id: 29,
+                question: '如果有四种材料各100克，按4:3:2:2的比例配制苓桂术甘汤，最多可以配制多少克？',
+                options: ['100克', '200克', '275克', '300克'],
+                correct: 2,
+                explanation: '比例和为4+3+2+2=11份，最少的材料是2份的，100克对应2份，1份50克，最多配制11×50=550克。',
+                difficulty: 'hard'
+            },
+            {
+                id: 30,
+                question: '师徒两人合作加工376个零件，他们加工5小时后，师傅有事离开，徒弟再加工了3小时，刚好完成任务。已知师傅每小时比徒弟多加工5个零件，师傅每小时加工多少个零件？',
+                options: ['35', '40', '45', '50'],
+                correct: 2,
+                explanation: '设徒弟每小时加工x个，师傅x+5个。5(x+x+5)+3x=376，解得x=17，师傅每小时加工22个。',
+                difficulty: 'hard'
+            },
+            {
+                id: 31,
+                question: '计算：8又1/3×3/4+101又1/4×4/5=',
+                options: ['85', '90', '95', '100'],
+                correct: 1,
+                explanation: '8又1/3=25/3，25/3×3/4=25/4=6.25；101又1/4=405/4，405/4×4/5=81；6.25+81=87.25≈90。',
+                difficulty: 'hard'
+            },
+            {
+                id: 32,
+                question: '小红、小兰、小亮三人分得一堆糖果，若按3:2:5或1:2:3的比分配，两种分得糖果一样多的是（）。',
+                options: ['小红', '小兰', '小亮', '无法确定'],
+                correct: 1,
+                explanation: '第一种分法小红占3/10，小兰占2/10，小亮占5/10；第二种分法小红占1/6，小兰占2/6，小亮占3/6。比较发现小兰都是占1/5。',
+                difficulty: 'hard'
+            },
+            {
+                id: 33,
+                question: '下面是四款毛衣的含毛量的表述，（）款毛衣的羊毛含量最高。',
+                options: ['羊毛质量是其他成分的2倍', '羊毛质量与其他成分的比是5:3', '羊毛质量与整件衣服质量的比是7:10', '羊毛质量占整件衣服质量的5/8'],
+                correct: 3,
+                explanation: 'A:羊毛占2/3≈66.7%；B:羊毛占5/8=62.5%；C:羊毛占7/10=70%；D:羊毛占5/8=62.5%。所以C最高。',
+                difficulty: 'medium'
+            },
+            {
+                id: 34,
+                question: '最小的质数的倒数是（）。',
+                options: ['1', '1/2', '2', '0.5'],
+                correct: 1,
+                explanation: '最小的质数是2，倒数是1/2。',
+                difficulty: 'easy'
+            },
+            {
+                id: 35,
+                question: '一袋大米重24千克，先吃掉1/4，又吃了1/4千克，还剩（）千克。',
+                options: ['17.75', '18', '18.25', '18.5'],
+                correct: 0,
+                explanation: '第一次吃掉24×1/4=6kg，剩余18kg；第二次吃掉0.25kg，剩余17.75kg。',
+                difficulty: 'easy'
+            },
+            {
+                id: 36,
+                question: '一个等腰三角形的周长是110厘米，若其中两条边的长度比是4:3，则另一条边的长度是（）厘米或（）厘米。',
+                options: ['40, 48', '42, 48', '44, 48', '46, 48'],
+                correct: 1,
+                explanation: '两种情况：1)腰:底=4:3，则腰=40cm，底=30cm，周长=110cm；2)底:腰=4:3，则底=40cm，腰=35cm，周长=110cm。',
+                difficulty: 'hard'
+            },
+            {
+                id: 37,
+                question: '张华和李明出同样多的钱合买价格相同的笔记本，分配时张华拿了10本，李明拿了6本，因此张华需要给李明10元，每本笔记本（）元。',
+                options: ['2.5', '5', '7.5', '10'],
+                correct: 1,
+                explanation: '总共16本，每人应得8本，张华多拿2本，给李明10元，所以每本5元。',
+                difficulty: 'medium'
+            },
+            {
+                id: 38,
+                question: '学校篮球与足球两个社团的人数的比是3:4，本学期篮球社团新增12名学生后，篮球与足球两个社团人数的比是6:7，两个社团现在一共有（）名学生。',
+                options: ['130', '140', '150', '160'],
+                correct: 1,
+                explanation: '设原来篮球3x人，足球4x人，(3x+12):4x=6:7，解得x=28，现在总人数=3×28+12+4×28=140人。',
+                difficulty: 'hard'
+            },
+            {
+                id: 39,
+                question: '六（五）班原有学生36人，其中女生占4/9；后来又转来女生若干人，这时女生人数和全班人数的比是3/5，转来女生多少人？',
+                options: ['4', '6', '8', '10'],
+                correct: 1,
+                explanation: '原来女生16人，男生20人。转来x名女生后，(16+x)/(36+x)=3/5，解得x=6。',
+                difficulty: 'medium'
+            },
+            {
+                id: 40,
+                question: '把3/5米长的绳子平均分成5段，每段长（）米。',
+                options: ['3/25米', '1/3米', '1/5米', '3/10米'],
+                correct: 0,
+                explanation: '3/5米 ÷ 5 = 3/5 × 1/5 = 3/25米。',
+                difficulty: 'easy'
+            },
+            {
+                id: 41,
+                question: '把一个正方体六个面都涂上颜色，切成大小相同的小正方体，一面涂色的有6个，两面涂色的有（）个。',
+                options: ['8', '12', '16', '24'],
+                correct: 1,
+                explanation: '一面涂色的有6个，说明是3×3×3的切割，两面涂色的在棱上，有12个。',
+                difficulty: 'hard'
+            },
+            {
+                id: 42,
+                question: '一个长方体，如果高减少2厘米，就变成一个正方体，这时表面积比原来减少48平方厘米，原来长方体的体积是（）立方厘米。',
+                options: ['96', '288', '384', '512'],
+                correct: 1,
+                explanation: '减少的48cm²是4个侧面的面积，每个侧面减少48÷4=12cm²，底面边长=12÷2=6cm，原高=6+2=8cm，体积=6×6×8=288cm³。',
+                difficulty: 'hard'
+            },
+            {
+                id: 43,
+                question: '冰化成水体积将减少1/10，则水结冰体积增加（）。',
+                options: ['1/9', '1/10', '1/11', '1/12'],
+                correct: 0,
+                explanation: '设冰体积10，水体积9，水结冰体积增加(10-9)/9=1/9。',
+                difficulty: 'medium'
+            },
+            {
+                id: 44,
+                question: '有一杯混合均匀的糖水，糖和水质量的比是1:10，喝了一半后，糖和水质量的比是（）。',
+                options: ['1:5', '1:10', '1:20', '2:10'],
+                correct: 1,
+                explanation: '喝掉一半后，糖和水的比例不变，仍然是1:10。',
+                difficulty: 'easy'
+            },
+            {
+                id: 45,
+                question: '6/7×4/5÷6/7×4/5=',
+                options: ['1', '16/25', '24/35', '36/49'],
+                correct: 1,
+                explanation: '原式=(6/7÷6/7)×(4/5×4/5)=1×16/25=16/25。',
+                difficulty: 'medium'
+            },
+            {
+                id: 46,
+                question: '计算：23/5×9/10+27/5÷10/9=',
+                options: ['9', '10', '11', '12'],
+                correct: 0,
+                explanation: '23/5×9/10=207/50，27/5÷10/9=27/5×9/10=243/50，和=450/50=9。',
+                difficulty: 'hard'
+            },
+            {
+                id: 47,
+                question: '一个数除以真分数，商（）被除数。',
+                options: ['大于', '小于', '等于', '大于或等于'],
+                correct: 3,
+                explanation: '除以真分数等于乘以假分数，当被除数为0时，商等于被除数；当被除数不为0时，商大于被除数。',
+                difficulty: 'medium'
+            },
+            {
+                id: 48,
+                question: '计算：(1/4+1/6)÷(1/3+1/2)=',
+                options: ['5/6', '5/12', '1/2', '2/3'],
+                correct: 2,
+                explanation: '通分：(3/12+2/12)÷(4/12+6/12)=5/12÷10/12=5/12×12/10=1/2。',
+                difficulty: 'medium'
+            },
+            {
+                id: 49,
+                question: '一个数的小数点向左移动两位，再向右移动一位，结果比原数（）。',
+                options: ['扩大10倍', '缩小10倍', '扩大100倍', '缩小100倍'],
+                correct: 1,
+                explanation: '向左移动两位缩小100倍，向右移动一位扩大10倍，最终结果是原数的1/10。',
+                difficulty: 'easy'
+            },
+            {
+                id: 50,
+                question: '甲乙丙三人共同加工零件，甲加工了总数的40%，乙加工了总数的1/3，丙加工了200个，这批零件共有（）个。',
+                options: ['500个', '600个', '750个', '900个'],
+                correct: 3,
+                explanation: '设总数为x，0.4x + x/3 + 200 = x，解得x=900个。',
+                difficulty: 'medium'
+            },
+            {
+                id: 51,
+                question: '一个三角形三个内角的度数比是1:2:3，这个三角形是（）三角形。',
+                options: ['锐角', '直角', '钝角', '等腰'],
+                correct: 1,
+                explanation: '三个角分别是30°、60°、90°，所以是直角三角形。',
+                difficulty: 'easy'
+            },
+            {
+                id: 52,
+                question: '计算：1.25×32×2.5=',
+                options: ['10', '100', '1000', '10000'],
+                correct: 1,
+                explanation: '1.25×32×2.5 = 1.25×8×4×2.5 = (1.25×8)×(4×2.5) = 10×10 = 100。',
+                difficulty: 'easy'
+            },
+            {
+                id: 53,
+                question: '把3米长的绳子平均分成5段，每段是全长的（），每段长（）米。',
+                options: ['1/5, 3/5', '3/5, 1/5', '1/5, 1/5', '3/5, 3/5'],
+                correct: 0,
+                explanation: '每段是全长的1/5，每段长3/5米。',
+                difficulty: 'easy'
+            },
+            {
+                id: 54,
+                question: '一个数的2/3是18，这个数的1/6是（）。',
+                options: ['3', '6', '9', '12'],
+                correct: 0,
+                explanation: '设这个数为x，2/3x=18，x=27，27×1/6=4.5=9/2。',
+                difficulty: 'medium'
+            },
+            {
+                id: 55,
+                question: '计算：3/8×1/4+3/8×3/4=',
+                options: ['3/8', '1/2', '1/4', '3/4'],
+                correct: 0,
+                explanation: '原式=3/8×(1/4+3/4)=3/8×1=3/8。',
+                difficulty: 'easy'
+            },
+            {
+                id: 56,
+                question: '一个圆柱和一个圆锥等底等高，它们的体积和是48立方分米，圆柱的体积是（）立方分米。',
+                options: ['12', '16', '32', '36'],
+                correct: 3,
+                explanation: '圆柱体积是圆锥的3倍，48÷4×3=36立方分米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 57,
+                question: '学校在小明家北偏东30°方向上，小明家在学校的（）方向上。',
+                options: ['南偏西30°', '南偏西60°', '东偏北30°', '东偏北60°'],
+                correct: 0,
+                explanation: '方向是相对的，北偏东30°的相反方向是南偏西30°。',
+                difficulty: 'medium'
+            },
+            {
+                id: 58,
+                question: '计算：5/9÷5/8÷8/9=',
+                options: ['1/9', '1', '5/9', '8/9'],
+                correct: 1,
+                explanation: '原式=5/9×8/5×9/8=1。',
+                difficulty: 'medium'
+            },
+            {
+                id: 59,
+                question: '一种商品先提价20%，再降价20%，现价与原价的比是（）。',
+                options: ['1:1', '24:25', '25:24', '96:100'],
+                correct: 1,
+                explanation: '设原价为100，提价20%后120，降价20%后96，现价与原价的比是96:100=24:25。',
+                difficulty: 'medium'
+            },
+            {
+                id: 60,
+                question: '20米比（）米少20%。',
+                options: ['25', '16', '22', '18'],
+                correct: 0,
+                explanation: '设要求的米数为x，x×(1-20%)=20，x=20÷0.8=25米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 61,
+                question: '计算：(3/5+1/4)×20=',
+                options: ['17', '18', '19', '20'],
+                correct: 0,
+                explanation: '通分：(12/20+5/20)×20=17/20×20=17。',
+                difficulty: 'medium'
+            },
+            {
+                id: 62,
+                question: '一个圆的半径扩大到原来的2倍，它的面积扩大到原来的（）倍。',
+                options: ['2', '4', '6', '8'],
+                correct: 1,
+                explanation: '圆的面积公式是πr²，半径扩大2倍后面积变为π(2r)²=4πr²，所以面积扩大4倍。',
+                difficulty: 'medium'
+            },
+            {
+                id: 63,
+                question: '计算：1/2÷(1/4+1/3)=',
+                options: ['6/7', '7/6', '1/7', '7/12'],
+                correct: 0,
+                explanation: '通分：1/2÷(3/12+4/12)=1/2÷7/12=1/2×12/7=6/7。',
+                difficulty: 'medium'
+            },
+            {
+                id: 64,
+                question: '如果a×1/2=b×2/3（a、b均不为0），那么a:b=（）。',
+                options: ['3:4', '4:3', '2:3', '3:2'],
+                correct: 1,
+                explanation: '根据比例的基本性质，a:b=2/3:1/2=4:3。',
+                difficulty: 'medium'
+            },
+            {
+                id: 65,
+                question: '把5克盐溶解在100克水中，盐和盐水的比是（）。',
+                options: ['1:20', '1:21', '5:100', '5:105'],
+                correct: 1,
+                explanation: '盐水质量=5+100=105克，盐和盐水的比是5:105=1:21。',
+                difficulty: 'easy'
+            },
+            {
+                id: 66,
+                question: '计算：(1/3+1/4+1/6)÷1/12=',
+                options: ['7', '8', '9', '10'],
+                correct: 2,
+                explanation: '原式=(4/12+3/12+2/12)÷1/12=9/12×12=9。',
+                difficulty: 'medium'
+            },
+            {
+                id: 67,
+                question: '一个长方体的长、宽、高分别是3cm、2cm、1cm，它的表面积是（）cm²。',
+                options: ['22', '24', '26', '28'],
+                correct: 0,
+                explanation: '表面积=2×(3×2+3×1+2×1)=2×(6+3+2)=22cm²。',
+                difficulty: 'medium'
+            },
+            {
+                id: 68,
+                question: '计算：2/3×1/4÷2/3×1/4=',
+                options: ['1', '1/16', '1/2', '1/8'],
+                correct: 1,
+                explanation: '原式=(2/3÷2/3)×(1/4×1/4)=1×1/16=1/16。',
+                difficulty: 'medium'
+            },
+            {
+                id: 69,
+                question: '在比例尺是1:1000000的地图上，量得两地距离是2厘米，实际距离是（）千米。',
+                options: ['2', '20', '200', '2000'],
+                correct: 1,
+                explanation: '实际距离=2×1000000=2000000厘米=20千米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 70,
+                question: '一个数的30%是60，这个数的20%是（）。',
+                options: ['20', '40', '60', '80'],
+                correct: 1,
+                explanation: '设这个数为x，0.3x=60，x=200，200×20%=40。',
+                difficulty: 'easy'
+            },
+            {
+                id: 71,
+                question: '计算：(2/3-1/2)÷(1/8+1/12)=',
+                options: ['1/2', '2/3', '3/4', '4/5'],
+                correct: 3,
+                explanation: '通分：(4/6-3/6)÷(3/24+2/24)=1/6÷5/24=1/6×24/5=4/5。',
+                difficulty: 'medium'
+            },
+            {
+                id: 72,
+                question: '一个圆柱的底面半径是2cm，高是5cm，它的侧面积是（）cm²。',
+                options: ['20π', '24π', '30π', '40π'],
+                correct: 0,
+                explanation: '圆柱侧面积=2πrh=2π×2×5=20πcm²。',
+                difficulty: 'medium'
+            },
+            {
+                id: 73,
+                question: '计算：1/5×2/3+4/15=',
+                options: ['2/3', '1/3', '1/5', '3/5'],
+                correct: 0,
+                explanation: '通分：2/15+4/15=6/15=2/3。',
+                difficulty: 'easy'
+            },
+            {
+                id: 74,
+                question: '如果x和y成正比例，当x=2时，y=10；当x=5时，y=（）。',
+                options: ['20', '25', '30', '35'],
+                correct: 1,
+                explanation: '正比例关系：x/y=2/10=1/5，当x=5时，y=5÷1/5=25。',
+                difficulty: 'medium'
+            },
+            {
+                id: 75,
+                question: '计算：(1/2+1/3)÷(1/4-1/6)=',
+                options: ['10', '12', '14', '16'],
+                correct: 0,
+                explanation: '通分：(3/6+2/6)÷(3/12-2/12)=5/6÷1/12=5/6×12=10。',
+                difficulty: 'medium'
+            };
+
+        // 英语词性数据库
+        const partOfSpeechData = [
+            {
+                id: 1,
+                name: '名词 (Noun)',
+                symbol: 'n.',
+                description: '表示人、事物、地点或抽象概念的词。',
+                examples: ['book, dog, city, love'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 0,
+                        explanation: 'book（书）是表示事物的名词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是形容词，不是名词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'run（跑）是动词，不是名词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'city',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 0,
+                        explanation: 'city（城市）是表示地点的名词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'quickly',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 3,
+                        explanation: 'quickly（快速地）是副词，不是名词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'love',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 0,
+                        explanation: 'love（爱）是表示抽象概念的名词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'big（大的）是形容词，不是名词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'student',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 0,
+                        explanation: 'student（学生）是表示人的名词。'
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: '动词 (Verb)',
+                symbol: 'v.',
+                description: '表示动作、状态或发生的事情。',
+                examples: ['run, eat, sleep, be'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'run（跑）是表示动作的动词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 0,
+                        explanation: 'book（书）是名词，不是动词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是形容词，不是动词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'eat',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'eat（吃）是表示动作的动词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'quickly',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 3,
+                        explanation: 'quickly（快速地）是副词，不是动词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'sleep',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'sleep（睡觉）是表示动作的动词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'big（大的）是形容词，不是动词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'be',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'be（是）是表示状态的动词。'
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: '形容词 (Adjective)',
+                symbol: 'adj.',
+                description: '用来描述或修饰名词的词。',
+                examples: ['big, happy, red, beautiful'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是描述心情的形容词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'run（跑）是动词，不是形容词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 0,
+                        explanation: 'book（书）是名词，不是形容词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'big（大的）是描述大小的形容词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'quickly',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 3,
+                        explanation: 'quickly（快速地）是副词，不是形容词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'red',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'red（红色的）是描述颜色的形容词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'eat',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'eat（吃）是动词，不是形容词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'beautiful',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'beautiful（美丽的）是描述外观的形容词。'
+                    }
+                ]
+            },
+            {
+                id: 4,
+                name: '副词 (Adverb)',
+                symbol: 'adv.',
+                description: '用来描述或修饰动词、形容词或其他副词的词。',
+                examples: ['quickly, very, well, often'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'quickly',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 3,
+                        explanation: 'quickly（快速地）是修饰动词的副词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是形容词，不是副词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 1,
+                        explanation: 'run（跑）是动词，不是副词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'very',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 3,
+                        explanation: 'very（非常）是修饰形容词或副词的副词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 0,
+                        explanation: 'book（书）是名词，不是副词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'well',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 3,
+                        explanation: 'well（好地）是修饰动词的副词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 2,
+                        explanation: 'big（大的）是形容词，不是副词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'often',
+                        options: ['名词', '动词', '形容词', '副词'],
+                        correct: 3,
+                        explanation: 'often（经常）是修饰动词的副词。'
+                    }
+                ]
+            },
+            {
+                id: 5,
+                name: '代词 (Pronoun)',
+                symbol: 'pron.',
+                description: '用来代替名词或名词短语的词。',
+                examples: ['I, you, he, she, it, we, they'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'I',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 3,
+                        explanation: 'I（我）是第一人称代词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 0,
+                        explanation: 'book（书）是名词，不是代词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 1,
+                        explanation: 'run（跑）是动词，不是代词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'you',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 3,
+                        explanation: 'you（你）是第二人称代词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是形容词，不是代词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'he',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 3,
+                        explanation: 'he（他）是第三人称代词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 2,
+                        explanation: 'big（大的）是形容词，不是代词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'they',
+                        options: ['名词', '动词', '形容词', '代词'],
+                        correct: 3,
+                        explanation: 'they（他们）是第三人称复数代词。'
+                    }
+                ]
+            },
+            {
+                id: 6,
+                name: '介词 (Preposition)',
+                symbol: 'prep.',
+                description: '表示名词或代词与其他词之间的关系。',
+                examples: ['in, on, at, by, with'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'in',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 3,
+                        explanation: 'in（在...里）是表示位置的介词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 0,
+                        explanation: 'book（书）是名词，不是介词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 1,
+                        explanation: 'run（跑）是动词，不是介词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'on',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 3,
+                        explanation: 'on（在...上）是表示位置的介词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是形容词，不是介词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'at',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 3,
+                        explanation: 'at（在...）是表示位置或时间的介词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 2,
+                        explanation: 'big（大的）是形容词，不是介词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'by',
+                        options: ['名词', '动词', '形容词', '介词'],
+                        correct: 3,
+                        explanation: 'by（通过）是表示方式的介词。'
+                    }
+                ]
+            },
+            {
+                id: 7,
+                name: '连词 (Conjunction)',
+                symbol: 'conj.',
+                description: '用来连接单词、短语或句子的词。',
+                examples: ['and, but, or, because'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'and',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 3,
+                        explanation: 'and（和）是连接并列成分的连词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 1,
+                        explanation: 'run（跑）是动词，不是连词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 0,
+                        explanation: 'book（书）是名词，不是连词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'but',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 3,
+                        explanation: 'but（但是）是表示转折的连词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是形容词，不是连词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'or',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 3,
+                        explanation: 'or（或者）是表示选择的连词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 2,
+                        explanation: 'big（大的）是形容词，不是连词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'because',
+                        options: ['名词', '动词', '形容词', '连词'],
+                        correct: 3,
+                        explanation: 'because（因为）是表示原因的连词。'
+                    }
+                ]
+            },
+            {
+                id: 8,
+                name: '感叹词 (Interjection)',
+                symbol: 'interj.',
+                description: '表示强烈情感或突发感叹的词。',
+                examples: ['oh, wow, ouch, hey'],
+                questions: [
+                    {
+                        id: 1,
+                        word: 'oh',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 3,
+                        explanation: 'oh（哦）是表示惊讶的感叹词。'
+                    },
+                    {
+                        id: 2,
+                        word: 'book',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 0,
+                        explanation: 'book（书）是名词，不是感叹词。'
+                    },
+                    {
+                        id: 3,
+                        word: 'run',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 1,
+                        explanation: 'run（跑）是动词，不是感叹词。'
+                    },
+                    {
+                        id: 4,
+                        word: 'wow',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 3,
+                        explanation: 'wow（哇）是表示赞叹的感叹词。'
+                    },
+                    {
+                        id: 5,
+                        word: 'happy',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 2,
+                        explanation: 'happy（开心的）是形容词，不是感叹词。'
+                    },
+                    {
+                        id: 6,
+                        word: 'ouch',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 3,
+                        explanation: 'ouch（哎哟）是表示疼痛的感叹词。'
+                    },
+                    {
+                        id: 7,
+                        word: 'big',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 2,
+                        explanation: 'big（大的）是形容词，不是感叹词。'
+                    },
+                    {
+                        id: 8,
+                        word: 'hey',
+                        options: ['名词', '动词', '形容词', '感叹词'],
+                        correct: 3,
+                        explanation: 'hey（嘿）是引起注意的感叹词。'
+                    }
+                ]
+            }
+        ];
+
+        // 必备知识数据库
+        const essentialKnowledge = [
+            {
+                id: 1,
+                text: '分数乘法法则：分子相乘的积做分子，分母相乘的积做分母，能约分的先约分。',
+                category: '数学 - 分数运算'
+            },
+            {
+                id: 2,
+                text: '分数除法法则：除以一个数（0除外），等于乘以这个数的倒数。',
+                category: '数学 - 分数运算'
+            },
+            {
+                id: 3,
+                text: '圆的面积公式：S = πr²，其中r是半径，π≈3.14。',
+                category: '数学 - 几何图形'
+            },
+            {
+                id: 4,
+                text: '圆的周长公式：C = 2πr 或 C = πd，其中r是半径，d是直径。',
+                category: '数学 - 几何图形'
+            },
+            {
+                id: 5,
+                text: '长方体体积公式：V = l×w×h，其中l是长，w是宽，h是高。',
+                category: '数学 - 几何图形'
+            },
+            {
+                id: 6,
+                text: '正方体体积公式：V = a³，其中a是棱长。',
+                category: '数学 - 几何图形'
+            },
+            {
+                id: 7,
+                text: '圆柱体积公式：V = πr²h，其中r是底面半径，h是高。',
+                category: '数学 - 几何图形'
+            },
+            {
+                id: 8,
+                text: '圆锥体积公式：V = 1/3πr²h，其中r是底面半径，h是高。',
+                category: '数学 - 几何图形'
+            },
+            {
+                id: 9,
+                text: '百分数的意义：表示一个数是另一个数的百分之几。',
+                category: '数学 - 百分数'
+            },
+            {
+                id: 10,
+                text: '比例的基本性质：在比例里，两个外项的积等于两个内项的积。',
+                category: '数学 - 比例'
+            },
+            {
+                id: 11,
+                text: '正比例关系：两种相关联的量，一种量变化，另一种量也随着变化，如果这两种量中相对应的两个数的比值（也就是商）一定，这两种量就叫做成正比例的量，它们的关系叫做正比例关系。',
+                category: '数学 - 比例'
+            },
+            {
+                id: 12,
+                text: '反比例关系：两种相关联的量，一种量变化，另一种量也随着变化，如果这两种量中相对应的两个数的积一定，这两种量就叫做成反比例的量，它们的关系叫做反比例关系。',
+                category: '数学 - 比例'
+            },
+            {
+                id: 13,
+                text: '比例尺公式：比例尺 = 图上距离 / 实际距离。',
+                category: '数学 - 比例尺'
+            },
+            {
+                id: 14,
+                text: '路程问题公式：路程 = 速度×时间，速度 = 路程÷时间，时间 = 路程÷速度。',
+                category: '数学 - 应用题'
+            },
+            {
+                id: 15,
+                text: '工程问题公式：工作总量 = 工作效率×工作时间，工作效率 = 工作总量÷工作时间，工作时间 = 工作总量÷工作效率。',
+                category: '数学 - 应用题'
+            },
+            {
+                id: 16,
+                text: '浓度问题公式：浓度 = 溶质质量 / 溶液质量×100%，溶液质量 = 溶质质量 + 溶剂质量。',
+                category: '数学 - 应用题'
+            }
+        ];
+
+        // 用户答题记录
+        let userProgress = {
+            mathQuestions: {},
+            speechTypes: {},
+            masteredQuestions: [],
+            masteredSpeechTypes: []
+        };
+
+        // ===== 核心功能函数 =====
+        
+        // localStorage 辅助函数
+        function safeLocalStorageGet(key, defaultValue = null) {
+            try {
+                const value = localStorage.getItem(key);
+                return value ? JSON.parse(value) : defaultValue;
+            } catch (error) {
+                return defaultValue;
+            }
+        }
+
+        function safeLocalStorageSet(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+        
+        // 加载用户答题记录
+        function loadUserProgress() {
+            const saved = safeLocalStorageGet('userProgress', {
+                mathQuestions: {},
+                speechTypes: {},
+                masteredQuestions: [],
+                masteredSpeechTypes: []
+            });
+            userProgress = saved;
+        }
+        
+        // 保存用户答题记录
+        function saveUserProgress() {
+            safeLocalStorageSet('userProgress', userProgress);
+        }
+        
+        // 更新数学进度
+        function updateMathProgress() {
+            const masteredCount = userProgress.masteredQuestions.length;
+            const totalQuestions = 75;
+            const progress = (masteredCount / totalQuestions) * 100;
+            
+            document.getElementById('math-mastered').textContent = masteredCount;
+            document.getElementById('math-total').textContent = totalQuestions;
+            document.getElementById('math-percent').textContent = `${Math.round(progress)}%`;
+        }
+        
+        // 更新英语进度
+        function updateEnglishProgress() {
+            const masteredCount = userProgress.masteredSpeechTypes.length;
+            const totalSpeechTypes = 8;
+            const progress = (masteredCount / totalSpeechTypes) * 100;
+            
+            document.getElementById('english-mastered').textContent = masteredCount;
+            document.getElementById('english-total').textContent = totalSpeechTypes;
+            document.getElementById('english-percent').textContent = `${Math.round(progress)}%`;
+        }
+        
+        // 显示随机知识点
+        function showRandomKnowledge() {
+            if (essentialKnowledge.length === 0) {
+                console.error('知识库为空，请添加 essentialKnowledge 数据');
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * essentialKnowledge.length);
+            const knowledge = essentialKnowledge[randomIndex];
+            
+            const displayArea = document.getElementById('knowledge-display');
+            
+            displayArea.innerHTML = `
+                <div class="knowledge-content">${knowledge.text}</div>
+                <div class="knowledge-category">${knowledge.category}</div>
+            `;
+        }
+        
+        // 显示知识库（点击知识库按钮时调用）
+        function showKnowledge() {
+            showRandomKnowledge();
+        }
+        
+        // 开始练习（数学）
+        function startPractice(subject) {
+            console.log(`开始${subject}练习`);
+            
+            if (essentialKnowledge.length === 0) {
+                alert('请先添加数据库内容！');
+                return;
+            }
+            
+            alert(`正在进入${subject === 'math' ? '数学' : '英语'}练习...\n\n请确保已正确添加数据库内容！`);
+            
+            // 实际项目中这里会加载练习页面
+            // 示例：从 mathQuestions 中随机选8题
+            // const selectedQuestions = getRandomQuestions(mathQuestions, 8);
+        }
+        
+        // 显示词性选择（英语）
+        function showSpeechSelection() {
+            console.log('显示词性选择');
+            
+            if (partOfSpeechData.length === 0) {
+                alert('请先添加英语数据库内容！');
+                return;
+            }
+            
+            alert('正在进入英语词性练习...\n\n请确保已正确添加 partOfSpeechData 数据库！');
+            
+            // 实际项目中这里会加载词性选择界面
+        }
+        
+        // 为触摸设备添加事件监听
+        function setupTouchEvents() {
+            // 获取所有可点击元素
+            const clickableElements = document.querySelectorAll('.subject-btn, .knowledge-left');
+            
+            clickableElements.forEach(element => {
+                // 移除可能存在的重复事件监听器
+                element.removeEventListener('click', handleClick);
+                element.removeEventListener('touchstart', handleTouchStart);
+                element.removeEventListener('touchend', handleTouchEnd);
+                element.removeEventListener('touchcancel', handleTouchCancel);
+                
+                // 添加点击事件
+                element.addEventListener('click', handleClick);
+                
+                // 添加触摸事件（使用passive: true以提高性能，但touchend中仍可preventDefault）
+                element.addEventListener('touchstart', handleTouchStart, { passive: true });
+                element.addEventListener('touchend', handleTouchEnd, { passive: false });
+                element.addEventListener('touchcancel', handleTouchCancel, { passive: true });
+                
+                // 防止长按出现菜单
+                element.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+            
+            console.log('触摸事件已设置，元素数量:', clickableElements.length);
+        }
+        
+        // 执行动作的函数
+        function executeAction(action) {
+            console.log('执行动作:', action);
+            switch(action) {
+                case 'math':
+                    startPractice('math');
+                    break;
+                case 'english':
+                    showSpeechSelection();
+                    break;
+                case 'knowledge':
+                    showKnowledge();
+                    break;
+                case 'random-knowledge':
+                    showRandomKnowledge();
+                    break;
+                default:
+                    console.log('未知动作:', action);
+            }
+        }
+        
+        // 处理点击事件（主要用于桌面设备）
+        function handleClick(e) {
+            const element = e.currentTarget;
+            const action = element.dataset.action;
+            
+            console.log('点击事件触发，动作:', action);
+            
+            // 防止在触摸设备上重复触发（触摸事件已经处理了）
+            if (element.touchHandled) {
+                element.touchHandled = false;
+                return;
+            }
+            
+            // 执行动作
+            executeAction(action);
+            
+            // 添加视觉反馈
+            element.classList.add('touch-active');
+            setTimeout(() => {
+                element.classList.remove('touch-active');
+            }, 150);
+        }
+        
+        // 处理触摸开始事件
+        function handleTouchStart(e) {
+            const element = e.currentTarget;
+            element.classList.add('touch-active');
+            
+            // 记录触摸开始信息
+            element.touchStart = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+                time: Date.now()
+            };
+            
+            console.log('触摸开始，元素:', element.dataset.action);
+        }
+        
+        // 处理触摸结束事件
+        function handleTouchEnd(e) {
+            const element = e.currentTarget;
+            const action = element.dataset.action;
+            
+            // 移除触摸反馈
+            element.classList.remove('touch-active');
+            
+            // 标记触摸已处理，防止click事件重复触发
+            element.touchHandled = true;
+            
+            // 如果没有触摸开始信息，直接执行动作（兼容某些Android设备）
+            if (!element.touchStart) {
+                if (action) {
+                    e.preventDefault();
+                    executeAction(action);
+                }
+                // 延迟清除标记，防止click事件触发
+                setTimeout(() => {
+                    element.touchHandled = false;
+                }, 300);
+                return;
+            }
+            
+            // 计算触摸移动距离和时间
+            const touch = e.changedTouches[0];
+            const deltaX = Math.abs(touch.clientX - element.touchStart.x);
+            const deltaY = Math.abs(touch.clientY - element.touchStart.y);
+            const deltaTime = Date.now() - element.touchStart.time;
+            
+            // 只有在明显滑动时才忽略（移动距离大于100px认为是滑动）
+            // 否则都视为点击，直接执行动作
+            if (deltaX < 100 && deltaY < 100 && deltaTime < 2000) {
+                console.log('触摸结束，执行动作:', action, '移动:', deltaX, deltaY, '时间:', deltaTime);
+                e.preventDefault();
+                executeAction(action);
+            } else {
+                console.log('触摸移动过大或时间过长，视为滑动，忽略:', deltaX, deltaY, deltaTime);
+            }
+            
+            // 清除触摸开始信息
+            element.touchStart = null;
+            
+            // 延迟清除标记，防止click事件触发
+            setTimeout(() => {
+                element.touchHandled = false;
+            }, 300);
+        }
+        
+        // 处理触摸取消事件
+        function handleTouchCancel(e) {
+            const element = e.currentTarget;
+            element.classList.remove('touch-active');
+            element.touchStart = null;
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM加载完成');
+            
+            // 加载用户进度
+            loadUserProgress();
+            updateMathProgress();
+            updateEnglishProgress();
+            
+            // 更新知识库数量
+            document.getElementById('knowledge-count').textContent = essentialKnowledge.length || 0;
+            
+            // 自动显示第一个知识点
+            if (essentialKnowledge.length > 0) {
+                setTimeout(() => {
+                    showRandomKnowledge();
+                }, 300);
+            }
+            
+            // 设置触摸事件
+            setupTouchEvents();
+            
+            // 添加调试信息
+            console.log('页面初始化完成，触摸支持已添加');
+            console.log('可点击元素数量:', document.querySelectorAll('.subject-btn, .knowledge-left').length);
+            
+            // 添加页面加载完成的提示
+            setTimeout(() => {
+                console.log('页面完全加载，可以开始使用');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

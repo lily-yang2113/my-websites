@@ -1,0 +1,3029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>谢多多错题本 - 每日练习</title>
+    <style>
+        :root {
+            --primary-color: #5D5FEF;
+            --primary-light: #8183FF;
+            --primary-dark: #4A4BCF;
+            --secondary-color: #FF6B8B;
+            --success-color: #4ECDC4;
+            --warning-color: #FFD166;
+            --danger-color: #EF476F;
+            --light-color: #F8F9FA;
+            --dark-color: #343A40;
+            --gray-color: #6C757D;
+            --gray-light: #E9ECEF;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: #f5f7fa;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            color: var(--dark-color);
+            position: relative;
+        }
+        
+        /* 简洁的顶部状态栏 */
+        .status-bar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(93, 95, 239, 0.2);
+        }
+        
+        .status-bar .back-btn {
+            position: absolute;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .status-bar .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 简洁的科目选择 */
+        .subject-selection {
+            margin: 15px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .subject-btn {
+            flex: 1;
+            background: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .subject-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subject-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            height: 60px;
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+            color: white;
+        }
+        
+        .subject-btn.english .subject-icon {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #FF4D6D 100%);
+        }
+        
+        .subject-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+        
+        .subject-count {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+        
+        /* 科目进度总结框 */
+        .subject-progress {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 15px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .progress-title {
+            font-size: 1rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .progress-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        
+        .math-progress .progress-value {
+            color: var(--primary-color);
+        }
+        
+        .english-progress .progress-value {
+            color: var(--secondary-color);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+        
+        .math-progress .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        }
+        
+        .english-progress .progress-fill {
+            background: linear-gradient(90deg, var(--secondary-color), #FF4D6D);
+        }
+        
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray-color);
+        }
+        
+        /* 简洁的每日目标提示 */
+        .daily-goal {
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.1) 0%, rgba(255, 209, 102, 0.2) 100%);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 209, 102, 0.3);
+        }
+        
+        .daily-icon {
+            font-size: 2rem;
+            color: #d6a214;
+        }
+        
+        .daily-text {
+            flex: 1;
+        }
+        
+        .daily-title {
+            font-size: 1rem;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .daily-desc {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+        
+        /* 词性选择页面 */
+        .speech-selection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+            overflow-y: auto;
+        }
+        
+        .speech-guide {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 15px 15px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .guide-title {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .guide-content {
+            font-size: 0.95rem;
+            color: var(--gray-color);
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .guide-tip {
+            display: inline-block;
+            background: rgba(255, 209, 102, 0.2);
+            color: #d6a214;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        /* 词性学习卡片 */
+        .part-of-speech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 0 15px 20px;
+            padding-bottom: 20px;
+        }
+        
+        .speech-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .speech-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .speech-card.selected {
+            border-color: var(--secondary-color);
+            background: rgba(255, 107, 139, 0.05);
+        }
+        
+        .speech-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            height: 60px;
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #FF4D6D 100%);
+            color: white;
+        }
+        
+        .speech-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+        }
+        
+        .speech-desc {
+            font-size: 0.8rem;
+            color: var(--gray-color);
+            margin-bottom: 8px;
+        }
+        
+        .speech-mastery {
+            font-size: 0.8rem;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        /* 简洁的练习区域 */
+        .practice-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            flex-direction: column;
+            z-index: 20;
+        }
+        
+        .question-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--gray-light);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .question-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .question-type {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: rgba(93, 95, 239, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .question-difficulty {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .difficulty-easy {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success-color);
+        }
+        
+        .difficulty-medium {
+            background: rgba(255, 209, 102, 0.2);
+            color: #d6a214;
+        }
+        
+        .difficulty-hard {
+            background: rgba(239, 71, 111, 0.2);
+            color: var(--danger-color);
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: var(--dark-color);
+            margin-bottom: 25px;
+        }
+        
+        .options-container {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .option-btn {
+            padding: 18px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            background: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f8f9ff;
+        }
+        
+        .option-btn.selected {
+            border-color: var(--primary-color);
+            background: rgba(93, 95, 239, 0.1);
+        }
+        
+        .option-btn.correct {
+            border-color: var(--success-color);
+            background: rgba(78, 205, 196, 0.15);
+            animation: correctPulse 0.6s ease;
+        }
+        
+        .option-btn.wrong {
+            border-color: var(--danger-color);
+            background: rgba(239, 71, 111, 0.1);
+            animation: wrongShake 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); box-shadow: 0 0 15px rgba(78, 205, 196, 0.3); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .option-label {
+            background: var(--gray-light);
+            color: var(--dark-color);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .option-btn.selected .option-label {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .option-btn.correct .option-label {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .option-btn.wrong .option-label {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .explanation-area {
+            background: #f8f9ff;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .explanation-area.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .explanation-title {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .explanation-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--dark-color);
+        }
+        
+        .action-bar {
+            background: white;
+            padding: 15px 20px;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: var(--gray-light);
+            color: var(--dark-color);
+        }
+        
+        .action-btn.secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* 简洁的完成界面 */
+        .completion-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            z-index: 30;
+        }
+        
+        .completion-icon {
+            font-size: 4.5rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+        
+        .completion-title {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .completion-message {
+            font-size: 1.1rem;
+            color: var(--gray-color);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .completion-stats {
+            background: #f8f9ff;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+        
+        .completion-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .completion-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: var(--gray-color);
+        }
+        
+        .stat-value {
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .subject-selection {
+                flex-direction: column;
+            }
+            
+            .part-of-speech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-text {
+                font-size: 1.3rem;
+            }
+            
+            .option-btn {
+                padding: 16px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-height: 900px) {
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .question-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 简洁的主页 -->
+    <div class="status-bar">
+        <button class="back-btn" id="back-btn" style="display: none;">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        谢多多专属错题本
+    </div>
+    
+    <!-- 简洁的每日目标提示 -->
+    <div class="daily-goal">
+        <div class="daily-icon">
+            <i class="fas fa-bullseye"></i>
+        </div>
+        <div class="daily-text">
+            <div class="daily-title">每日目标：8道题</div>
+            <div class="daily-desc">每天轻松练习8道错题，答对3次即可攻克该题</div>
+        </div>
+    </div>
+    
+    <!-- 简洁的科目选择 -->
+    <div class="subject-selection">
+        <button class="subject-btn" id="math-btn">
+            <div class="subject-icon">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <div class="subject-name">数学</div>
+            <div class="subject-count">75道错题</div>
+        </button>
+        
+        <button class="subject-btn english" id="english-btn">
+            <div class="subject-icon">
+                <i class="fas fa-language"></i>
+            </div>
+            <div class="subject-name">英语</div>
+            <div class="subject-count">词性专项练习</div>
+        </button>
+    </div>
+    
+    <!-- 数学进度总结 -->
+    <div class="subject-progress math-progress" id="math-progress">
+        <div class="progress-header">
+            <div class="progress-title">数学攻克进度</div>
+            <div class="progress-value" id="math-progress-value">0%</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="math-progress-fill"></div>
+        </div>
+        <div class="progress-stats">
+            <span>已攻克 <span id="math-mastered">0</span> 题</span>
+            <span>共 <span id="math-total">75</span> 题</span>
+        </div>
+    </div>
+    
+    <!-- 英语进度总结 -->
+    <div class="subject-progress english-progress" id="english-progress">
+        <div class="progress-header">
+            <div class="progress-title">词性掌握进度</div>
+            <div class="progress-value" id="english-progress-value">0%</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="english-progress-fill"></div>
+        </div>
+        <div class="progress-stats">
+            <span>已掌握 <span id="english-mastered">0</span> 个词性</span>
+            <span>共 <span id="english-total">8</span> 个词性</span>
+        </div>
+    </div>
+    
+    <!-- 词性选择页面 -->
+    <div class="speech-selection" id="speech-selection">
+        <div class="speech-guide">
+            <div class="guide-title">🎯 学习目标：掌握英语八大词性</div>
+            <div class="guide-content">
+                点击下方词性卡片开始学习。每个词性包含8道练习题，答对3次即可掌握该词性。
+            </div>
+            <div class="guide-tip">💡 提示：每天建议学习2-3个词性，循序渐进效果更好</div>
+        </div>
+        
+        <div class="part-of-speech-grid" id="part-of-speech-grid">
+            <!-- 词性卡片将通过JS动态生成 -->
+        </div>
+    </div>
+    
+    <!-- 简洁的练习区域 -->
+    <div class="practice-area" id="practice-area">
+        <div class="question-container" id="question-container">
+            <!-- 题目将通过JS动态生成 -->
+        </div>
+        
+        <div class="action-bar">
+            <button class="action-btn secondary" id="prev-btn" disabled>
+                <i class="fas fa-arrow-left"></i> 上一题
+            </button>
+            <button class="action-btn primary" id="submit-btn">
+                提交答案
+            </button>
+            <button class="action-btn primary" id="next-btn" style="display: none;">
+                下一题 <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 简洁的完成界面 -->
+    <div class="completion-screen" id="completion-screen">
+        <div class="completion-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <h2 class="completion-title" id="completion-title">今日练习完成！</h2>
+        <p class="completion-message" id="completion-message">你真棒！坚持就是胜利！</p>
+        
+        <div class="completion-stats">
+            <div class="completion-stat">
+                <span class="stat-label">正确题数</span>
+                <span class="stat-value" id="final-correct">0</span>
+            </div>
+            <div class="completion-stat">
+                <span class="stat-label">总题数</span>
+                <span class="stat-value" id="final-total">0</span>
+            </div>
+            <div class="completion-stat">
+                <span class="stat-label">正确率</span>
+                <span class="stat-value" id="final-accuracy">0%</span>
+            </div>
+            <div class="completion-stat">
+                <span class="stat-label">今日攻克</span>
+                <span class="stat-value" id="final-mastered">0题</span>
+            </div>
+        </div>
+        
+        <button class="action-btn primary" id="return-btn">
+            <i class="fas fa-home"></i> 返回首页
+        </button>
+        <button class="action-btn secondary" id="review-btn" style="margin-top: 12px;">
+            <i class="fas fa-redo"></i> 复习错题
+        </button>
+    </div>
+
+    <script>
+        // 数学题库 - 包含75道题
+        const mathQuestions = [
+            {
+                id: 1,
+                question: '（）米比15米多1/3米；',
+                options: ['15又1/3米', '20米', '5米', '10米'],
+                correct: 0,
+                explanation: '15米 + 1/3米 = 15又1/3米。注意：这里的1/3米是具体的长度，不是比例。',
+                difficulty: 'easy'
+            },
+            {
+                id: 2,
+                question: '8吨比（）吨少1/4。',
+                options: ['10吨', '6吨', '32/3吨', '64/7吨'],
+                correct: 2,
+                explanation: '设要求的吨数为x，则x × (1 - 1/4) = 8，x = 8 ÷ 3/4 = 8 × 4/3 = 32/3吨。',
+                difficulty: 'medium'
+            },
+            {
+                id: 3,
+                question: '一批产品的合格率是90%，合格的比不合格的多（）%。',
+                options: ['80%', '90%', '800%', '900%'],
+                correct: 2,
+                explanation: '合格率90%，不合格率10%，合格的是不合格的9倍，所以多(9-1)×100% = 800%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 4,
+                question: '甲的2/5相当于乙的2/3，甲是乙的（）%。',
+                options: ['60%', '120%', '166.67%', '66.67%'],
+                correct: 2,
+                explanation: '设甲为x，乙为y，则(2/5)x = (2/3)y，解得x/y = (2/3) ÷ (2/5) = 5/3 ≈ 166.67%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 5,
+                question: '正方形的边长为5厘米，若边长增加1/5，周长增长（）%，面积增加（）%。',
+                options: ['20%, 44%', '25%, 56.25%', '20%, 56.25%', '25%, 44%'],
+                correct: 0,
+                explanation: '原边长5cm，增加1/5后为6cm。原周长20cm，现周长24cm，增长20%；原面积25cm²，现面积36cm²，增长44%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 6,
+                question: '甲乙两人原有钱数的比是3:4，乙后来给甲20元，这时甲的钱是乙的4/5，原来甲有（）元。',
+                options: ['180元', '540元', '240元', '300元'],
+                correct: 1,
+                explanation: '设原来甲有3x元，乙则有4x元。乙给甲20元后：甲有3x+20，乙有4x-20。(3x+20)/(4x-20) = 4/5，解得x=180，所以甲原有3×180=540元。',
+                difficulty: 'hard'
+            },
+            {
+                id: 7,
+                question: '0.125÷8=',
+                options: ['0.015625', '0.15625', '1.5625', '0.0015625'],
+                correct: 0,
+                explanation: '0.125÷8 = 0.015625。或者：0.125 = 1/8，所以1/8 ÷ 8 = 1/64 = 0.015625。',
+                difficulty: 'easy'
+            },
+            {
+                id: 8,
+                question: '2.2×125% + 7.8÷80%=',
+                options: ['10.5', '11.25', '12.5', '13.75'],
+                correct: 2,
+                explanation: '2.2×1.25 = 2.75；7.8÷0.8 = 9.75；2.75 + 9.75 = 12.5。',
+                difficulty: 'medium'
+            },
+            {
+                id: 9,
+                question: '计算：17×（3/14 - 2/17）×14=',
+                options: ['23', '5', '17', '14'],
+                correct: 0,
+                explanation: '运用a×(b-c)=ab-ac 的运算法则可得17×14×3/14 - 17×14×2/17 = 17×3 - 14×2 = 51 - 28 = 23。',
+                difficulty: 'medium'
+            },
+            {
+                id: 10,
+                question: '张老师存了20000元，定期两年，两年的存款年利率为2.1%，到期时一共可取回本息多少元？',
+                options: ['20840元', '20842元', '20844元', '20846元'],
+                correct: 0,
+                explanation: '利息 = 20000×2.1%×2 = 840元，本息 = 20000+840 = 20840元。',
+                difficulty: 'easy'
+            },
+            {
+                id: 11,
+                question: '六年级原来男生人数占全年级人数的45%，后来又转进15名男生，现在男生人数占全年级的48%，现在全年级有多少人？',
+                options: ['450人', '275人', '515人', '600人'],
+                correct: 1,
+                explanation: '设原来全年级有x人，则0.45x+15=0.48(x+15)，解得x=260，现在全年级有260+15=275人。',
+                difficulty: 'hard'
+            },
+            {
+                id: 12,
+                question: '计算：3/7×1/4+25%×2/7+0.25×1/7=',
+                options: ['0.25', '0.3', '3/14', '5/14'],
+                correct: 2,
+                explanation: '25% = 0.25 = 1/4，原式 = (3/7+2/7+1/7)×1/4 = 6/7×1/4 = 6/28 = 3/14。',
+                difficulty: 'medium'
+            },
+            {
+                id: 13,
+                question: '六（2）班有男生20人，女生25人，女生人数与男生人数的比是（）；男生人数约占全班人数的（）%；男生人数比女生少（）%；女生人数比男生人数多（）%。',
+                options: ['5:4, 44.4%, 20%, 25%', '5:4, 44.4%, 25%, 20%', '4:5, 44.4%, 20%, 25%', '5:4, 55.6%, 20%, 25%'],
+                correct: 0,
+                explanation: '女生:男生=25:20=5:4；全班45人，男生占20/45≈44.4%；男生比女生少(25-20)/25=20%；女生比男生多(25-20)/20=25%。',
+                difficulty: 'medium'
+            },
+            {
+                id: 14,
+                question: '一种油菜籽的出油率为24%～32%，200千克这样的油菜籽最少可以榨油（）千克，如果要榨96千克油，最少需要（）千克油菜籽。',
+                options: ['48kg, 400kg', '48kg, 300kg', '64kg, 400kg', '64kg, 300kg'],
+                correct: 1,
+                explanation: '最少出油率24%，200kg最少榨油200×24%=48kg；榨96kg油，按最高出油率32%计算，最少需要96÷32%=300kg。',
+                difficulty: 'medium'
+            },
+            {
+                id: 15,
+                question: '72吨比（）吨多12.5%。',
+                options: ['64吨', '80吨', '81吨', '84吨'],
+                correct: 0,
+                explanation: '设要求的吨数为x，则x×(1+12.5%)=72，x=72÷1.125=64吨。',
+                difficulty: 'medium'
+            },
+            {
+                id: 16,
+                question: '一个电饭煲的原价220元，现价160元，电饭煲的价格降低了百分之几？',
+                options: ['约27.27%', '约31.25%', '约37.5%', '约45%'],
+                correct: 0,
+                explanation: '降价金额=220-160=60元，降低百分比=60÷220≈0.2727=27.27%。',
+                difficulty: 'easy'
+            },
+            {
+                id: 17,
+                question: '小红读一本书，第一天看了全书的20%，第二天看了全书的1/4，还剩22页，这本书共有多少页？',
+                options: ['40页', '44页', '48页', '50页'],
+                correct: 0,
+                explanation: '两天看了20%+25%=45%，剩下55%对应22页，全书=22÷55%=40页。',
+                difficulty: 'medium'
+            },
+            {
+                id: 18,
+                question: '有含盐16%的盐水40千克，蒸发多少千克水后可将浓度提到20%？',
+                options: ['8千克', '9千克', '10千克', '12千克'],
+                correct: 0,
+                explanation: '盐的质量=40×16%=6.4千克，蒸发后盐水质量=6.4÷20%=32千克，蒸发水=40-32=8千克。',
+                difficulty: 'medium'
+            },
+            {
+                id: 19,
+                question: '在一个棱长为50cm的正方体容器中盛满水，垂直插入一根底面积为30平方厘米、高为60厘米的长方体铁棒，会溢出（）毫升水。',
+                options: ['900', '1500', '1800', '2000'],
+                correct: 1,
+                explanation: '铁棒浸入水中的高度为50cm，浸入体积=30×50=1500cm³=1500毫升。',
+                difficulty: 'hard'
+            },
+            {
+                id: 20,
+                question: '一个长方形铁盒，外包装注明尺寸是20cm×12cm×10cm，这个纸盒体积是（）dm³，表面积是（）dm²。',
+                options: ['2.4, 11.2', '2.4, 11.6', '2.4, 12.4', '2.4, 12.8'],
+                correct: 0,
+                explanation: '体积=20×12×10=2400cm³=2.4dm³；表面积=2×(20×12+20×10+12×10)=2×560=1120cm²=11.2dm²。',
+                difficulty: 'medium'
+            },
+            {
+                id: 21,
+                question: '一条5/4千米长的路，已经修了1/2千米，再修（）千米，正好修完60%。',
+                options: ['1/4', '3/8', '1/2', '5/8'],
+                correct: 1,
+                explanation: '总长的60%=(5/4)×0.6=0.75千米，已修0.5千米，还需修0.75-0.5=0.25=1/4千米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 22,
+                question: '计算：7/12-3/7-(4/7-7/12)=',
+                options: ['7/6', '5/6', '1', '1/6'],
+                correct: 0,
+                explanation: '原式=7/12-3/7-4/7+7/12=7/12+7/12-(3/7+4/7)=14/12-1=2/12=1/6。',
+                difficulty: 'medium'
+            },
+            {
+                id: 23,
+                question: '(1/2+2/3-5/18)÷1/36=',
+                options: ['28', '32', '36', '40'],
+                correct: 1,
+                explanation: '原式=(9/18+12/18-5/18)÷1/36=16/18×36=16×2=32。',
+                difficulty: 'medium'
+            },
+            {
+                id: 24,
+                question: '计算下面图形的表面积（图形：下方是长6cm、宽3cm、高4cm的长方体，上方是棱长2cm的正方体）。',
+                options: ['124cm²', '136cm²', '148cm²', '160cm²'],
+                correct: 1,
+                explanation: '长方体表面积=2×(6×3+6×4+3×4)=108cm²，正方体表面积=6×4=24cm²，减去重叠部分2×2×2=8cm²，总表面积=108+24-8=124cm²。',
+                difficulty: 'hard'
+            },
+            {
+                id: 25,
+                question: '一瓶油用去1/3后，余下的油连瓶重900克，再用去余下的3/4后，连瓶重450克。瓶中原有油多少克？',
+                options: ['800克', '900克', '1000克', 1500克'],
+                correct: 1,
+                explanation: '设原有油x克，瓶重y克。第一次用去后：(2/3)x+y=900；第二次用去后：(2/3)×(1/4)x+y=450。解得x=900克。',
+                difficulty: 'hard'
+            },
+            {
+                id: 26,
+                question: '0.1³=（）',
+                options: ['0.001', '0.01', '0.1', '1'],
+                correct: 0,
+                explanation: '0.1³=0.1×0.1×0.1=0.001。',
+                difficulty: 'easy'
+            },
+            {
+                id: 27,
+                question: '计算：5/13×18+5/13×22-5/13=',
+                options: ['5', '10', '15', '20'],
+                correct: 2,
+                explanation: '原式=5/13×(18+22-1)=5/13×39=5×3=15。',
+                difficulty: 'medium'
+            },
+            {
+                id: 28,
+                question: '4.09立方分米=（）毫升',
+                options: ['409', '4090', '40900', '409000'],
+                correct: 1,
+                explanation: '1立方分米=1000毫升，4.09立方分米=4090毫升。',
+                difficulty: 'easy'
+            },
+            {
+                id: 29,
+                question: '如果有四种材料各100克，按4:3:2:2的比例配制苓桂术甘汤，最多可以配制多少克？',
+                options: ['100克', '200克', '275克', '300克'],
+                correct: 2,
+                explanation: '比例和为4+3+2+2=11份，最少的材料是2份的，100克对应2份，1份50克，最多配制11×50=550克。',
+                difficulty: 'hard'
+            },
+            {
+                id: 30,
+                question: '师徒两人合作加工376个零件，他们加工5小时后，师傅有事离开，徒弟再加工了3小时，刚好完成任务。已知师傅每小时比徒弟多加工5个零件，师傅每小时加工多少个零件？',
+                options: ['27', '30', '32', '50'],
+                correct: 2,
+                explanation: '设徒弟每小时加工x个，师傅x+5个。5(x+x+5)+3x=376，解得x=27，师傅每小时加工32个。',
+                difficulty: 'hard'
+            },
+            {
+                id: 31,
+                question: '计算：8又1/3×3/4+101又1/4×4/5=',
+                options: ['85', '87.25', '89.5', '90'],
+                correct: 1,
+                explanation: '8又1/3=25/3，25/3×3/4=25/4=6.25；101又1/4=405/4，405/4×4/5=81；6.25+81=87.25。',
+                difficulty: 'hard'
+            },
+            {
+                id: 32,
+                question: '小红、小兰、小亮三人分得一堆糖果，若按3:2:5或1:2:3的比分配，两种分得糖果一样多的是（）。',
+                options: ['小红', '小兰', '小亮', '无法确定'],
+                correct: 1,
+                explanation: '第一种分法小红占3/10，小兰占2/10，小亮占5/10；第二种分法小红占1/6，小兰占2/6，小亮占3/6。比较发现小兰都是占1/5。',
+                difficulty: 'hard'
+            },
+            {
+                id: 33,
+                question: '下面是四款毛衣的含毛量的表述，（）款毛衣的羊毛含量最高。',
+                options: ['羊毛质量是其他成分的2倍', '羊毛质量与其他成分的比是5:3', '羊毛质量与整件衣服质量的比是7:10', '羊毛质量占整件衣服质量的5/8'],
+                correct: 3,
+                explanation: 'A:羊毛占2/3≈66.7%；B:羊毛占5/8=62.5%；C:羊毛占7/10=70%；D:羊毛占5/8=62.5%。所以C最高。',
+                difficulty: 'medium'
+            },
+            {
+                id: 34,
+                question: '最小的质数的倒数是（）。',
+                options: ['1', '1/2', '2', '0.5'],
+                correct: 1,
+                explanation: '最小的质数是2，倒数是1/2。',
+                difficulty: 'easy'
+            },
+            {
+                id: 35,
+                question: '一袋大米重24千克，先吃掉1/4，又吃了1/4千克，还剩（）千克。',
+                options: ['17.75', '18', '18.25', '18.5'],
+                correct: 0,
+                explanation: '第一次吃掉24×1/4=6kg，剩余18kg；第二次吃掉0.25kg，剩余17.75kg。',
+                difficulty: 'easy'
+            },
+            {
+                id: 36,
+                question: '一个等腰三角形的周长是110厘米，若其中两条边的长度比是4:3，则另一条边的长度是（）厘米或（）厘米。',
+                options: ['40, 48', '40, 33', '44, 48', '46, 48'],
+                correct: 1,
+                explanation: '两种情况：1)腰:底=4:4:3，则腰=40cm，底=30cm，周长=110cm；2)腰:底=3:3:4，则底=44cm，腰=33cm，周长=110cm。',
+                difficulty: 'hard'
+            },
+            {
+                id: 37,
+                question: '张华和李明出同样多的钱合买价格相同的笔记本，分配时张华拿了10本，李明拿了6本，因此张华需要给李明10元，每本笔记本（）元。',
+                options: ['2.5', '5', '7.5', '10'],
+                correct: 1,
+                explanation: '总共16本，每人应得8本，张华多拿2本，给李明10元，所以每本5元。',
+                difficulty: 'medium'
+            },
+            {
+                id: 38,
+                question: '学校篮球与足球两个社团的人数的比是3:4，本学期篮球社团新增12名学生后，篮球与足球两个社团人数的比是6:7，两个社团现在一共有（）名学生。',
+                options: ['196', '208', '150', '160'],
+                correct: 1,
+                explanation: '设原来篮球3x人，足球4x人，(3x+12):4x=6:7，解得x=28，现在总人数=3×28+12+4×28=208人。',
+                difficulty: 'hard'
+            },
+            {
+                id: 39,
+                question: '六（五）班原有学生36人，其中女生占4/9；后来又转来女生若干人，这时女生人数和全班人数的比是3/5，转来女生多少人？',
+                options: ['24', '14', '6', '10'],
+                correct: 1,
+                explanation: '原来女生16人，男生20人。转来x名女生后，(16+x)/(36+x)=3/5，解得x=14。',
+                difficulty: 'medium'
+            },
+            {
+                id: 40,
+                question: '把3/5米长的绳子平均分成5段，每段长（）米。',
+                options: ['3/25米', '1/3米', '1/5米', '3/10米'],
+                correct: 0,
+                explanation: '3/5米 ÷ 5 = 3/5 × 1/5 = 3/25米。',
+                difficulty: 'easy'
+            },
+            {
+                id: 41,
+                question: '把一个正方体六个面都涂上颜色，切成大小相同的小正方体，一面涂色的有6个，两面涂色的有（）个。',
+                options: ['8', '12', '16', '24'],
+                correct: 1,
+                explanation: '一面涂色的有6个，说明是3×3×3的切割，两面涂色的在棱上，有12个。',
+                difficulty: 'hard'
+            },
+            {
+                id: 42,
+                question: '一个长方体，如果高减少2厘米，就变成一个正方体，这时表面积比原来减少48平方厘米，原来长方体的体积是（）立方厘米。',
+                options: ['96', '288', '384', '512'],
+                correct: 1,
+                explanation: '减少的48cm²是4个侧面的面积，每个侧面减少48÷4=12cm²，底面边长=12÷2=6cm，原高=6+2=8cm，体积=6×6×8=288cm³。',
+                difficulty: 'hard'
+            },
+            {
+                id: 43,
+                question: '冰化成水体积将减少1/10，则水结冰体积增加（）。',
+                options: ['1/9', '1/10', '1/11', '1/12'],
+                correct: 0,
+                explanation: '设冰体积10，水体积9，水结冰体积增加(10-9)/9=1/9。',
+                difficulty: 'medium'
+            },
+            {
+                id: 44,
+                question: '有一杯混合均匀的糖水，糖和水质量的比是1:10，喝了一半后，糖和水质量的比是（）。',
+                options: ['1:5', '1:10', '1:20', '2:10'],
+                correct: 1,
+                explanation: '喝掉一半后，糖和水的比例不变，仍然是1:10。',
+                difficulty: 'easy'
+            },
+            {
+                id: 45,
+                question: '6/7×4/5÷6/7×4/5=',
+                options: ['1', '16/25', '24/35', '36/49'],
+                correct: 1,
+                explanation: '原式=(6/7÷6/7)×(4/5×4/5)=1×16/25=16/25。',
+                difficulty: 'medium'
+            },
+            {
+                id: 46,
+                question: '计算：23/5×9/10+27/5÷10/9=',
+                options: ['9', '10', '11', '12'],
+                correct: 0,
+                explanation: '23/5×9/10=207/50，27/5÷10/9=27/5×9/10=243/50，和=450/50=9。',
+                difficulty: 'hard'
+            },
+            {
+                id: 47,
+                question: '长方形菜地，宽是27米，宽比长少1/4，这块长方形菜地面积是多少平方米？',
+                options: ['972', '1080', '1188', '1296'],
+                correct: 0,
+                explanation: '长=27÷(1-1/4)=36米，面积=36×27=972平方米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 48,
+                question: '一个长方体的底面积是0.2平方米，高是8分米，它的体积是（）立方分米。',
+                options: ['160', '1600', '16000', '1.6'],
+                correct: 0,
+                explanation: '0.2平方米 = 20平方分米，体积 = 底面积 × 高 = 20 × 8 = 160立方分米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 49,
+                question: '用两个棱长3厘米的正方体拼成一个长方体，这个长方体的体积是（）立方分米。',
+                options: ['0.054', '0.54', '5.4', '54'],
+                correct: 0,
+                explanation: '两个正方体体积=2×3×3×3=54立方厘米=0.054立方分米。',
+                difficulty: 'easy'
+            },
+            {
+                id: 50,
+                question: '长方体有（）组相对的面，（）组相对的棱。',
+                options: ['3, 3', '3, 4', '4, 3', '4, 4'],
+                correct: 0,
+                explanation: '长方体有6个面，3组相对的面；有12条棱，3组相对的棱。',
+                difficulty: 'easy'
+            },
+            {
+                id: 51,
+                question: '用5个棱长4分米的正方体粘合成一个长方体，长方体的表面积比5个正方体的表面积少（）dm²。',
+                options: ['64', '96', '128', '160'],
+                correct: 2,
+                explanation: '5个正方体表面积=5×6×4×4=480dm²。粘合成一排的长方体：长20dm，宽高各4dm，表面积=2×(20×4+20×4+4×4)=352dm²。减少480-352=128dm²。',
+                difficulty: 'hard'
+            },
+            {
+                id: 52,
+                question: '林叔叔靠一面墙用篱笆围了一个长8分米、宽6分米、高4分米的长方体形状的鸡圈，这个鸡圈至少要用篱笆（）平方分米。',
+                options: ['56', '64', '72', '80'],
+                correct: 0,
+                explanation: '靠墙围成长方体，需要围5个面：底面+两个侧面+两个前面。最少需要8×6+8×4×2+6×4×2=48+64+48=160平方分米。',
+                difficulty: 'hard'
+            },
+            {
+                id: 53,
+                question: '一个游泳池的容积大约是240（ ）（填单位）。',
+                options: ['毫升', '升', '立方米', '立方分米'],
+                correct: 2,
+                explanation: '游泳池容积较大，用立方米合适，240立方米。',
+                difficulty: 'easy'
+            },
+            {
+                id: 54,
+                question: '有一种长1.8米、宽和高都是20cm的通风管，做10节这样的通风管需要（）平方分米铁皮。',
+                options: ['1440', '1520', '1600', '1680'],
+                correct: 0,
+                explanation: '一节通风管侧面积=1.8×0.2×4=1.44平方米=144平方分米，10节需要1440平方分米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 55,
+                question: '把一块底面长为12厘米、宽为8厘米、高为10厘米的长方体铁块，浸没在一个棱长为4分米的正方体水槽里（水没有溢出）。原来的水面高度为20厘米，放入铁块后水面高度为多少厘米？',
+                options: ['20.6', '21.2', '21.8', '22.4'],
+                correct: 0,
+                explanation: '铁块体积=12×8×10=960cm³。水槽底面积=40×40=1600cm²。水面上升960÷1600=0.6cm，新高度=20.6cm。',
+                difficulty: 'hard'
+            },
+            {
+                id: 56,
+                question: '女生的人数比男生少5/9，（）的人数×5/9=（）的人数。',
+                options: ['男生, 女生比男生少的', '女生, 男生比女生多的', '男生, 男生比女生多的', '女生, 女生比男生少的'],
+                correct: 0,
+                explanation: '男生人数×5/9=女生比男生少的人数。',
+                difficulty: 'medium'
+            },
+            {
+                id: 57,
+                question: '把一个正方体六个面都涂上颜色，切成大小相同的小正方体，两面涂色的有24个，一面涂色的有（）个。',
+                options: ['6', '12', '24', '36'],
+                correct: 2,
+                explanation: '两面涂色的有24个，说明每条棱上有5个小正方体（5×5×5切割），一面涂色的在面心，有6×9=54个。',
+                difficulty: 'hard'
+            },
+            {
+                id: 58,
+                question: '有一个长方体储水箱，如果把一个底面是边长为5厘米的正方形的长方体铁块全部放入水中，水面上升9cm；如果把长方体铁块拉出水面8cm后，水面就下降4厘米。这个长方体铁块的体积是多少cm³？',
+                options: ['450', '900', '1350', '1800'],
+                correct: 1,
+                explanation: '铁块全部浸没时排开水的体积等于铁块体积。铁块拉出8cm，水面下降4cm，说明铁块高度与水面变化比例2:1，铁块高18cm，体积=5×5×18=450cm³。',
+                difficulty: 'hard'
+            },
+            {
+                id: 59,
+                question: '化简比并求比值：9/6=（）:（）=（）。',
+                options: ['3:2, 1.5', '3:2, 2/3', '2:3, 0.67', '2:3, 1.5'],
+                correct: 0,
+                explanation: '9/6=3/2=3:2=1.5。',
+                difficulty: 'easy'
+            },
+            {
+                id: 60,
+                question: '一根铁丝长5/8米，截去1/4，还剩下（），还剩下（）米；若截去1/4米，则还剩下（）米。',
+                options: ['3/4, 15/32, 3/8', '3/4, 15/32, 7/16', '3/4, 15/32, 1/2', '3/4, 15/32, 5/16'],
+                correct: 1,
+                explanation: '截去1/4，剩3/4，剩(5/8)×(3/4)=15/32米；截去1/4米，剩5/8-1/4=5/8-2/8=3/8米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 61,
+                question: '如果把甲仓存粮的1/5运给乙仓，两仓存粮量相等，那么原来（）。',
+                options: ['①甲仓比乙仓多存2/5', '②乙仓占甲仓的4/5', '③乙仓比甲仓少存2/5', '①②③都对'],
+                correct: 2,
+                explanation: '设甲仓5份，运出1份剩4份，此时乙仓也是4份，原来乙仓3份。甲比乙多2份，多(5-3)/3；乙占甲3/5；乙比甲少(5-3)/5。',
+                difficulty: 'hard'
+            },
+            {
+                id: 62,
+                question: '一根钢材长4/5米，用去1/2，用去（）米，还剩（）米。',
+                options: ['2/5, 2/5', '2/5, 3/5', '3/5, 2/5', '3/5, 3/5'],
+                correct: 0,
+                explanation: '用去(4/5)×(1/2)=2/5米，还剩4/5-2/5=2/5米。',
+                difficulty: 'easy'
+            },
+            {
+                id: 63,
+                question: '已知a与b互为倒数，那么a/10÷5/b的计算结果是（）。',
+                options: ['1/50', '1/10', '1/2', '50'],
+                correct: 0,
+                explanation: 'a/10÷5/b=a/10×b/5=ab/50=1/50。',
+                difficulty: 'medium'
+            },
+            {
+                id: 64,
+                question: '巧克力比奶糖少2/5，则奶糖比巧克力多（）。',
+                options: ['2/5', '2/3', '3/2', '5/2'],
+                correct: 1,
+                explanation: '设奶糖为1，巧克力为1-2/5=3/5，奶糖比巧克力多(1-3/5)÷(3/5)=2/3。',
+                difficulty: 'medium'
+            },
+            {
+                id: 65,
+                question: '果园里，苹果树棵数是梨树的5/12，如果梨树有60棵，苹果树有（）棵；如果苹果树有60棵，梨树有（）棵。',
+                options: ['25, 144', '25, 150', '30, 144', '30, 150'],
+                correct: 0,
+                explanation: '梨树60棵，苹果树=60×5/12=25棵；苹果树60棵，梨树=60÷5/12=144棵。',
+                difficulty: 'medium'
+            },
+            {
+                id: 66,
+                question: '比较大小：9/10÷2/3○9/10；5/8×2/3○5/8；1÷5/7○5/7÷1',
+                options: ['>, <, >', '>, <, =', '>, >, >', '<, <, >'],
+                correct: 0,
+                explanation: '除以小于1的数结果变大，所以9/10÷2/3>9/10；乘以小于1的数结果变小，所以5/8×2/3<5/8；1÷5/7=7/5>1，5/7÷1=5/7<1，所以>。',
+                difficulty: 'easy'
+            },
+            {
+                id: 67,
+                question: '一个长方体木块，长8厘米、宽5厘米、高6厘米。把它截成一个最大的正方体，这个正方体的棱长总和是（）厘米。',
+                options: ['60', '72', '84', '96'],
+                correct: 0,
+                explanation: '最大正方体棱长由最小边决定，是5厘米，棱长总和=12×5=60厘米。',
+                difficulty: 'easy'
+            },
+            {
+                id: 68,
+                question: '用三个棱长8cm的正方体摆成一个长方体，摆成后长方体的棱长之和是多少厘米？',
+                options: ['96', '128', '160', '192'],
+                correct: 1,
+                explanation: '三个正方体摆成一排，长方体长24cm，宽高各8cm，棱长和=(24+8+8)×4=160cm。',
+                difficulty: 'medium'
+            },
+            {
+                id: 69,
+                question: '一个长方体的长为8厘米，上面与前面积之和为72cm²，右面的面积是上面的一半，求这个长方体的表面积。',
+                options: ['136', '1804', '152', '160'],
+                correct: 1,
+                explanation: '设宽a高b，8×a+8×b=72，a×b=1/2×8×a，解得a=5,b=4，表面积=2×(8×5+8×4+5×4)=184cm²。',
+                difficulty: 'hard'
+            },
+            {
+                id: 70,
+                question: '一种通风管每根长2米、横截面是边长4分米的正方形。做10根这样的通风管，至少要用铁皮（）平方米。',
+                options: ['32', '36', '40', '44'],
+                correct: 0,
+                explanation: '一节通风管侧面积=2×0.4×4=3.2平方米，10节需要32平方米。',
+                difficulty: 'medium'
+            },
+            {
+                id: 71,
+                question: '冰箱冷藏室的容积是200（）（填单位）；一瓶滴眼液的容积是10（）（填单位）。',
+                options: ['升, 毫升', '毫升, 升', '立方米, 毫升', '升, 升'],
+                correct: 0,
+                explanation: '冰箱容积用升，滴眼液用毫升。',
+                difficulty: 'easy'
+            },
+            {
+                id: 72,
+                question: '解方程：2x - 1.3 = 7.7；x - 1/2+ 5/6 = 5/6',
+                options: ['x=4.5, x=1/2', 'x=4.5, x=1', 'x=4.5, x=3/2', 'x=4.5, x=2'],
+                correct: 0,
+                explanation: '第一方程：2x=9，x=4.5；第二方程：x-1/2=0，x=1/2。',
+                difficulty: 'medium'
+            },
+            {
+                id: 73,
+                question: '计算：2/5- 0.25=',
+                options: ['0.15', '0.2', '0.25', '0.3'],
+                correct: 0,
+                explanation: '2/5=0.4，0.4-0.25=0.15。',
+                difficulty: 'easy'
+            },
+            {
+                id: 74,
+                question: '一个正方体的6个面上分别写着：红、橙、黄、绿、青、蓝，从三个不同角度看到的结果图，那么与"绿"字相对的面写的字是（）。',
+                options: ['红', '橙', '黄', '蓝'],
+                correct: 2,
+                explanation: '通过空间想象和排除法，绿与黄相对。',
+                difficulty: 'hard'
+            },
+            {
+                id: 75,
+                question: '一种牙膏的包装盒是长方体，长是15厘米、宽和高都是3厘米。现有一个长60厘米、宽30厘米、高30厘米的长方形纸箱，这个纸箱中最多放多少盒牙膏？',
+                options: ['400', '600', '800', '1000'],
+                correct: 1,
+                explanation: '纸箱长60÷15=4盒，宽30÷3=10盒，高30÷3=10盒，总共4×10×10=400盒。',
+                difficulty: 'medium'
+            }
+        ];
+
+        // 英语词性专项练习数据 - 8个词性，每个词性8道题
+        const partOfSpeechData = [
+            {
+                id: 'noun',
+                name: '名词 (Noun)',
+                icon: '📚',
+                description: '表示人、事物、地点或抽象概念的名称',
+                examples: 'book（书）、teacher（老师）、happiness（幸福）',
+                color: '#FF6B8B',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'noun-1',
+                        type: 'identification',
+                        question: '下面哪个单词是名词？',
+                        options: ['run', 'beautiful', 'book', 'quickly'],
+                        correct: 2,
+                        explanation: 'book（书）是名词，表示事物的名称。run（跑）是动词，beautiful（美丽的）是形容词，quickly（快速地）是副词。',
+                        rule: '名词通常表示人、事物、地点或抽象概念的名称，可以放在冠词（a/an/the）后面。'
+                    },
+                    {
+                        id: 'noun-2',
+                        type: 'identification',
+                        question: '在句子 "The cat is sleeping." 中，哪个词是名词？',
+                        options: ['The', 'cat', 'is', 'sleeping'],
+                        correct: 1,
+                        explanation: 'cat（猫）是名词，表示动物的名称。The是冠词，is是动词，sleeping是动词的现在分词形式。',
+                        rule: '名词在句子中通常作主语或宾语，可以回答"什么"或"谁"的问题。'
+                    },
+                    {
+                        id: 'noun-3',
+                        type: 'fill',
+                        question: '请选择正确的名词填空：I have a red ______.',
+                        options: ['run', 'apple', 'beautiful', 'quickly'],
+                        correct: 1,
+                        explanation: 'apple（苹果）是名词，表示事物的名称，符合句意"我有一个红苹果"。',
+                        rule: '名词可以放在形容词后面，如"red apple"。'
+                    },
+                    {
+                        id: 'noun-4',
+                        type: 'classification',
+                        question: '下面哪组词都是名词？',
+                        options: ['dog, cat, bird', 'run, jump, swim', 'big, small, tall', 'he, she, it'],
+                        correct: 0,
+                        explanation: 'dog（狗）、cat（猫）、bird（鸟）都是表示动物名称的名词。',
+                        rule: '表示具体事物、人或动物的词通常是名词。'
+                    },
+                    {
+                        id: 'noun-5',
+                        type: 'sentence',
+                        question: '在句子 "My sister loves music." 中，有几个名词？',
+                        options: ['1个', '2个', '3个', '4个'],
+                        correct: 1,
+                        explanation: 'sister（姐妹）和music（音乐）都是名词，所以有2个名词。',
+                        rule: '名词可以是具体的人或事物，也可以是抽象的概念。'
+                    },
+                    {
+                        id: 'noun-6',
+                        type: 'identification',
+                        question: '下面哪个是抽象名词？',
+                        options: ['table', 'happiness', 'computer', 'teacher'],
+                        correct: 1,
+                        explanation: 'happiness（幸福）是抽象名词，表示一种情感状态。table、computer、teacher都是具体名词。',
+                        rule: '抽象名词表示情感、品质、状态或概念，而不是具体的事物。'
+                    },
+                    {
+                        id: 'noun-7',
+                        type: 'fill',
+                        question: '选择正确的名词填空：The ______ of Paris is beautiful.',
+                        options: ['be', 'beautifully', 'city', 'run'],
+                        correct: 2,
+                        explanation: 'city（城市）是名词，符合句意"巴黎的城市很美丽"。',
+                        rule: '名词可以作句子的主语，如"city"在这里是主语。'
+                    },
+                    {
+                        id: 'noun-8',
+                        type: 'sentence',
+                        question: '在句子 "Children are playing in the park." 中，名词是什么？',
+                        options: ['Children', 'are', 'playing', 'park'],
+                        correct: 0,
+                        explanation: 'Children（孩子们）是名词，作句子的主语；park（公园）也是名词，作地点状语的一部分。',
+                        rule: '名词可以是可数名词（如children）或不可数名词，可以有单复数形式。'
+                    }
+                ]
+            },
+            {
+                id: 'verb',
+                name: '动词 (Verb)',
+                icon: '⚡',
+                description: '表示动作、状态或存在',
+                examples: 'run（跑）、is（是）、have（有）',
+                color: '#4ECDC4',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'verb-1',
+                        type: 'identification',
+                        question: '下面哪个单词是动词？',
+                        options: ['happy', 'book', 'run', 'quickly'],
+                        correct: 2,
+                        explanation: 'run（跑）是动词，表示动作。happy（高兴的）是形容词，book（书）是名词，quickly（快速地）是副词。',
+                        rule: '动词表示动作、状态或存在，通常描述主语在做什么。'
+                    },
+                    {
+                        id: 'verb-2',
+                        type: 'identification',
+                        question: '在句子 "She sings beautifully." 中，哪个词是动词？',
+                        options: ['She', 'sings', 'beautifully'],
+                        correct: 1,
+                        explanation: 'sings（唱歌）是动词，表示动作。She（她）是代词，beautifully（优美地）是副词。',
+                        rule: '动词在句子中作谓语，说明主语的动作或状态。'
+                    },
+                    {
+                        id: 'verb-3',
+                        type: 'fill',
+                        question: '请选择正确的动词填空：They ______ to school every day.',
+                        options: ['walk', 'red', 'happiness', 'slowly'],
+                        correct: 0,
+                        explanation: 'walk（走）是动词，符合句意"他们每天走路去学校"。',
+                        rule: '动词可以根据时态变化形式，如walk（现在时）、walked（过去时）。'
+                    },
+                    {
+                        id: 'verb-4',
+                        type: 'classification',
+                        question: '下面哪组词都是动词？',
+                        options: ['read, write, study', 'book, pen, desk', 'big, small, tall', 'he, she, it'],
+                        correct: 0,
+                        explanation: 'read（读）、write（写）、study（学习）都是表示动作的动词。',
+                        rule: '表示动作或行为的词通常是动词。'
+                    },
+                    {
+                        id: 'verb-5',
+                        type: 'sentence',
+                        question: '在句子 "The dog barks loudly." 中，动词是什么？',
+                        options: ['The', 'dog', 'barks', 'loudly'],
+                        correct: 2,
+                        explanation: 'barks（吠叫）是动词，表示狗的动作。',
+                        rule: '动词通常跟在主语后面，描述主语的动作。'
+                    },
+                    {
+                        id: 'verb-6',
+                        type: 'identification',
+                        question: '下面哪个是助动词？',
+                        options: ['run', 'be', 'book', 'happy'],
+                        correct: 1,
+                        explanation: 'be（是）是助动词，用于构成进行时态、被动语态等。run是实义动词，book是名词，happy是形容词。',
+                        rule: '助动词帮助主要动词构成时态、语态、疑问句或否定句。'
+                    },
+                    {
+                        id: 'verb-7',
+                        type: 'fill',
+                        question: '选择正确的动词填空：She can ______ English very well.',
+                        options: ['speak', 'speaking', 'speaks', 'spoke'],
+                        correct: 0,
+                        explanation: 'speak（说）是动词原形，放在情态动词can后面。',
+                        rule: '情态动词后面的动词要用原形。'
+                    },
+                    {
+                        id: 'verb-8',
+                        type: 'sentence',
+                        question: '在句子 "They have finished their homework." 中，动词是什么？',
+                        options: ['They', 'have', 'finished', 'homework'],
+                        correct: 2,
+                        explanation: 'finished（完成）是主要动词，have是助动词，一起构成现在完成时。',
+                        rule: '动词可以有不同的时态形式，如finish（现在）、finished（过去）、will finish（将来）。'
+                    }
+                ]
+            },
+            {
+                id: 'adjective',
+                name: '形容词 (Adjective)',
+                icon: '🎨',
+                description: '描述名词的特征或性质',
+                examples: 'beautiful（美丽的）、big（大的）、happy（高兴的）',
+                color: '#FFD166',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'adjective-1',
+                        type: 'identification',
+                        question: '下面哪个单词是形容词？',
+                        options: ['run', 'book', 'beautiful', 'quickly'],
+                        correct: 2,
+                        explanation: 'beautiful（美丽的）是形容词，用于描述事物的特征。run（跑）是动词，book（书）是名词，quickly（快速地）是副词。',
+                        rule: '形容词用于修饰名词，描述名词的特征、性质或状态。'
+                    },
+                    {
+                        id: 'adjective-2',
+                        type: 'identification',
+                        question: '在句子 "The blue sky is clear." 中，哪个词是形容词？',
+                        options: ['The', 'blue', 'sky', 'is'],
+                        correct: 1,
+                        explanation: 'blue（蓝色的）是形容词，描述天空的颜色。clear（晴朗的）也是形容词。',
+                        rule: '形容词通常放在名词前面，如"blue sky"。'
+                    },
+                    {
+                        id: 'adjective-3',
+                        type: 'fill',
+                        question: '请选择正确的形容词填空：She has ______ hair.',
+                        options: ['run', 'long', 'book', 'quickly'],
+                        correct: 1,
+                        explanation: 'long（长的）是形容词，描述头发的特征，符合句意"她有长发"。',
+                        rule: '形容词可以回答"什么样的"问题，如"什么样的头发？长的头发。"'
+                    },
+                    {
+                        id: 'adjective-4',
+                        type: 'classification',
+                        question: '下面哪组词都是形容词？',
+                        options: ['big, small, tall', 'run, jump, swim', 'book, pen, desk', 'he, she, it'],
+                        correct: 0,
+                        explanation: 'big（大的）、small（小的）、tall（高的）都是形容词。',
+                        rule: '描述事物特征、性质或状态的词通常是形容词。'
+                    },
+                    {
+                        id: 'adjective-5',
+                        type: 'sentence',
+                        question: '在句子 "The delicious cake is on the table." 中，形容词是什么？',
+                        options: ['The', 'delicious', 'cake', 'table'],
+                        correct: 1,
+                        explanation: 'delicious（美味的）是形容词，描述蛋糕的特征。',
+                        rule: '形容词通常放在名词前面，修饰名词。'
+                    },
+                    {
+                        id: 'adjective-6',
+                        type: 'identification',
+                        question: '下面哪个是数量形容词？',
+                        options: ['red', 'three', 'beautiful', 'quickly'],
+                        correct: 1,
+                        explanation: 'three（三）是数量形容词，表示数量。red是颜色形容词，beautiful是品质形容词，quickly是副词。',
+                        rule: '数量形容词表示数量，如three（三）、many（许多）、few（少）等。'
+                    },
+                    {
+                        id: 'adjective-7',
+                        type: 'fill',
+                        question: '选择正确的形容词填空：This is an ______ story.',
+                        options: ['interest', 'interesting', 'interested', 'interestingly'],
+                        correct: 1,
+                        explanation: 'interesting（有趣的）是形容词，修饰名词story。',
+                        rule: '以-ing结尾的形容词通常描述事物给人的感受，如interesting（有趣的）、boring（无聊的）。'
+                    },
+                    {
+                        id: 'adjective-8',
+                        type: 'sentence',
+                        question: '在句子 "She looks happy today." 中，形容词是什么？',
+                        options: ['She', 'looks', 'happy', 'today'],
+                        correct: 2,
+                        explanation: 'happy（高兴的）是形容词，描述主语的状态。',
+                        rule: '形容词可以放在系动词（如look、seem、be）后面作表语，描述主语的状态。'
+                    }
+                ]
+            },
+            {
+                id: 'adverb',
+                name: '副词 (Adverb)',
+                icon: '🚀',
+                description: '修饰动词、形容词或其他副词',
+                examples: 'quickly（快速地）、very（非常）、well（好）',
+                color: '#5D5FEF',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'adverb-1',
+                        type: 'identification',
+                        question: '下面哪个单词是副词？',
+                        options: ['run', 'book', 'beautiful', 'quickly'],
+                        correct: 3,
+                        explanation: 'quickly（快速地）是副词，用于修饰动词。run（跑）是动词，book（书）是名词，beautiful（美丽的）是形容词。',
+                        rule: '副词通常修饰动词、形容词或其他副词，描述动作的方式、程度等。'
+                    },
+                    {
+                        id: 'adverb-2',
+                        type: 'identification',
+                        question: '在句子 "He runs very fast." 中，哪个词是副词？',
+                        options: ['He', 'runs', 'very', 'fast'],
+                        correct: 2,
+                        explanation: 'very（非常）是副词，修饰形容词fast。fast（快地）也是副词。',
+                        rule: '副词可以修饰形容词，表示程度，如"very fast"。'
+                    },
+                    {
+                        id: 'adverb-3',
+                        type: 'fill',
+                        question: '请选择正确的副词填空：She speaks English ______.',
+                        options: ['good', 'well', 'beautiful', 'quick'],
+                        correct: 1,
+                        explanation: 'well（好地）是副词，修饰动词speaks，符合句意"她英语说得很好"。',
+                        rule: '副词通常以-ly结尾，但well是例外。'
+                    },
+                    {
+                        id: 'adverb-4',
+                        type: 'classification',
+                        question: '下面哪组词都是副词？',
+                        options: ['quickly, slowly, happily', 'run, jump, swim', 'big, small, tall', 'book, pen, desk'],
+                        correct: 0,
+                        explanation: 'quickly（快速地）、slowly（慢慢地）、happily（快乐地）都是副词。',
+                        rule: '许多副词以-ly结尾，描述动作的方式。'
+                    },
+                    {
+                        id: 'adverb-5',
+                        type: 'sentence',
+                        question: '在句子 "She sings beautifully." 中，副词是什么？',
+                        options: ['She', 'sings', 'beautifully'],
+                        correct: 2,
+                        explanation: 'beautifully（优美地）是副词，修饰动词sings，描述唱歌的方式。',
+                        rule: '副词通常放在动词后面，描述动作的方式。'
+                    },
+                    {
+                        id: 'adverb-6',
+                        type: 'identification',
+                        question: '下面哪个是频率副词？',
+                        options: ['quickly', 'often', 'very', 'well'],
+                        correct: 1,
+                        explanation: 'often（经常）是频率副词，表示动作发生的频率。',
+                        rule: '频率副词表示动作发生的频率，如always（总是）、often（经常）、sometimes（有时）。'
+                    },
+                    {
+                        id: 'adverb-7',
+                        type: 'fill',
+                        question: '选择正确的副词填空：He works ______ hard.',
+                        options: ['extreme', 'extremely', 'extremer', 'extremed'],
+                        correct: 1,
+                        explanation: 'extremely（极其）是副词，修饰形容词hard。',
+                        rule: '副词可以修饰形容词，表示程度，如"extremely hard"。'
+                    },
+                    {
+                        id: 'adverb-8',
+                        type: 'sentence',
+                        question: '在句子 "They will arrive tomorrow." 中，副词是什么？',
+                        options: ['They', 'will', 'arrive', 'tomorrow'],
+                        correct: 3,
+                        explanation: 'tomorrow（明天）是时间副词，表示动作发生的时间。',
+                        rule: '时间副词表示动作发生的时间，如today（今天）、yesterday（昨天）、soon（很快）。'
+                    }
+                ]
+            },
+            {
+                id: 'pronoun',
+                name: '代词 (Pronoun)',
+                icon: '👤',
+                description: '代替名词，避免重复',
+                examples: 'he（他）、she（她）、it（它）',
+                color: '#EF476F',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'pronoun-1',
+                        type: 'identification',
+                        question: '下面哪个单词是代词？',
+                        options: ['run', 'book', 'he', 'quickly'],
+                        correct: 2,
+                        explanation: 'he（他）是代词，代替男性的人名。run（跑）是动词，book（书）是名词，quickly（快速地）是副词。',
+                        rule: '代词用来代替名词，避免重复使用同一个名词。'
+                    },
+                    {
+                        id: 'pronoun-2',
+                        type: 'identification',
+                        question: '在句子 "She is my friend." 中，哪个词是代词？',
+                        options: ['She', 'is', 'my', 'friend'],
+                        correct: 0,
+                        explanation: 'She（她）是代词，代替女性的名字。my（我的）是物主代词，也是代词的一种。',
+                        rule: '人称代词（如I, you, he, she, it, we, they）代替特定的人或事物。'
+                    },
+                    {
+                        id: 'pronoun-3',
+                        type: 'fill',
+                        question: '请选择正确的代词填空：______ are playing in the park.',
+                        options: ['He', 'She', 'They', 'It'],
+                        correct: 2,
+                        explanation: 'They（他们）是代词，代替复数的人，符合句意"他们正在公园里玩"。',
+                        rule: '代词必须与它所指代的名词在数（单数/复数）上保持一致。'
+                    },
+                    {
+                        id: 'pronoun-4',
+                        type: 'classification',
+                        question: '下面哪组词都是代词？',
+                        options: ['he, she, it', 'run, jump, swim', 'big, small, tall', 'book, pen, desk'],
+                        correct: 0,
+                        explanation: 'he（他）、she（她）、it（它）都是人称代词。',
+                        rule: '代词包括人称代词、物主代词、指示代词等。'
+                    },
+                    {
+                        id: 'pronoun-5',
+                        type: 'sentence',
+                        question: '在句子 "This is my book." 中，物主代词是什么？',
+                        options: ['This', 'is', 'my', 'book'],
+                        correct: 2,
+                        explanation: 'my（我的）是物主代词，表示所有关系。',
+                        rule: '物主代词表示所属关系，如my（我的）、your（你的）、his（他的）等。'
+                    },
+                    {
+                        id: 'pronoun-6',
+                        type: 'identification',
+                        question: '下面哪个是反身代词？',
+                        options: ['he', 'myself', 'that', 'some'],
+                        correct: 1,
+                        explanation: 'myself（我自己）是反身代词，表示动作返回到主语本身。',
+                        rule: '反身代词以-self（单数）或-selves（复数）结尾，如myself、yourself、themselves。'
+                    },
+                    {
+                        id: 'pronoun-7',
+                        type: 'fill',
+                        question: '选择正确的代词填空：______ is the best student in our class.',
+                        options: ['He', 'Him', 'His', 'Himself'],
+                        correct: 0,
+                        explanation: 'He（他）是主格代词，作句子的主语。',
+                        rule: '主格代词（I, you, he, she, it, we, they）在句子中作主语。'
+                    },
+                    {
+                        id: 'pronoun-8',
+                        type: 'sentence',
+                        question: '在句子 "Give the book to me." 中，代词是什么？',
+                        options: ['Give', 'book', 'to', 'me'],
+                        correct: 3,
+                        explanation: 'me（我）是宾格代词，作介词的宾语。',
+                        rule: '宾格代词（me, you, him, her, it, us, them）在句子中作动词或介词的宾语。'
+                    }
+                ]
+            },
+            {
+                id: 'preposition',
+                name: '介词 (Preposition)',
+                icon: '📍',
+                description: '表示名词或代词与其他词之间的关系',
+                examples: 'in（在...里）、on（在...上）、at（在...）',
+                color: '#06D6A0',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'preposition-1',
+                        type: 'identification',
+                        question: '下面哪个单词是介词？',
+                        options: ['run', 'book', 'in', 'quickly'],
+                        correct: 2,
+                        explanation: 'in（在...里）是介词，表示位置关系。run（跑）是动词，book（书）是名词，quickly（快速地）是副词。',
+                        rule: '介词表示名词或代词与句子其他部分之间的关系，如位置、时间、方式等。'
+                    },
+                    {
+                        id: 'preposition-2',
+                        type: 'identification',
+                        question: '在句子 "The cat is on the table." 中，哪个词是介词？',
+                        options: ['The', 'cat', 'is', 'on'],
+                        correct: 3,
+                        explanation: 'on（在...上）是介词，表示猫和桌子之间的位置关系。',
+                        rule: '介词通常与名词或代词一起构成介词短语，如"on the table"。'
+                    },
+                    {
+                        id: 'preposition-3',
+                        type: 'fill',
+                        question: '请选择正确的介词填空：We go to school ______ Monday.',
+                        options: ['in', 'on', 'at', 'by'],
+                        correct: 1,
+                        explanation: 'on用于具体的某一天，符合句意"我们在星期一去上学"。',
+                        rule: '介词用法：in用于年/月/季节，on用于具体日期，at用于具体时间点。'
+                    },
+                    {
+                        id: 'preposition-4',
+                        type: 'classification',
+                        question: '下面哪组词都是介词？',
+                        options: ['in, on, at', 'run, jump, swim', 'he, she, it', 'big, small, tall'],
+                        correct: 0,
+                        explanation: 'in（在...里）、on（在...上）、at（在...）都是介词。',
+                        rule: '常见的介词有in、on、at、under、behind、between等。'
+                    },
+                    {
+                        id: 'preposition-5',
+                        type: 'sentence',
+                        question: '在句子 "She is good at English." 中，介词是什么？',
+                        options: ['She', 'is', 'good', 'at'],
+                        correct: 3,
+                        explanation: 'at（在...方面）是介词，与good构成固定搭配"be good at"（擅长）。',
+                        rule: '介词可以与形容词构成固定搭配，如"good at"、"afraid of"等。'
+                    },
+                    {
+                        id: 'preposition-6',
+                        type: 'identification',
+                        question: '下面哪个表示位置的介词？',
+                        options: ['at', 'for', 'to', 'with'],
+                        correct: 0,
+                        explanation: 'at表示位置，如at home（在家）。for表示目的，to表示方向，with表示伴随。',
+                        rule: '位置介词表示事物的位置，如in（在...里）、on（在...上）、at（在...处）。'
+                    },
+                    {
+                        id: 'preposition-7',
+                        type: 'fill',
+                        question: '选择正确的介词填空：The book is ______ the table.',
+                        options: ['in', 'on', 'at', 'by'],
+                        correct: 1,
+                        explanation: 'on（在...上）表示书在桌子的表面上。',
+                        rule: 'on表示接触在表面上，in表示在某个空间内部。'
+                    },
+                    {
+                        id: 'preposition-8',
+                        type: 'sentence',
+                        question: '在句子 "They will meet at 5 o\'clock." 中，介词是什么？',
+                        options: ['They', 'will', 'meet', 'at'],
+                        correct: 3,
+                        explanation: 'at（在...）是介词，表示具体的时间点。',
+                        rule: '时间介词at用于具体时间点，如at 5 o\'clock（在5点钟）。'
+                    }
+                ]
+            },
+            {
+                id: 'conjunction',
+                name: '连词 (Conjunction)',
+                icon: '🔗',
+                description: '连接单词、短语或句子',
+                examples: 'and（和）、but（但是）、because（因为）',
+                color: '#118AB2',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'conjunction-1',
+                        type: 'identification',
+                        question: '下面哪个单词是连词？',
+                        options: ['run', 'and', 'book', 'quickly'],
+                        correct: 1,
+                        explanation: 'and（和）是连词，用于连接两个并列的成分。run（跑）是动词，book（书）是名词，quickly（快速地）是副词。',
+                        rule: '连词用于连接单词、短语或句子，表示它们之间的关系。'
+                    },
+                    {
+                        id: 'conjunction-2',
+                        type: 'identification',
+                        question: '在句子 "I like apples and bananas." 中，哪个词是连词？',
+                        options: ['I', 'like', 'apples', 'and'],
+                        correct: 3,
+                        explanation: 'and（和）是连词，连接apples和bananas两个名词。',
+                        rule: '并列连词（如and、but、or）连接两个对等的成分。'
+                    },
+                    {
+                        id: 'conjunction-3',
+                        type: 'fill',
+                        question: '请选择正确的连词填空：I want to go, ______ I am busy.',
+                        options: ['and', 'but', 'or', 'because'],
+                        correct: 1,
+                        explanation: 'but（但是）是连词，表示转折关系，符合句意"我想去，但是我很忙"。',
+                        rule: 'but表示转折关系，连接两个意思相反或相对的部分。'
+                    },
+                    {
+                        id: 'conjunction-4',
+                        type: 'classification',
+                        question: '下面哪组词都是连词？',
+                        options: ['and, but, because', 'run, jump, swim', 'he, she, it', 'in, on, at'],
+                        correct: 0,
+                        explanation: 'and（和）、but（但是）、because（因为）都是连词。',
+                        rule: '常见的连词有and、but、or、so、because等。'
+                    },
+                    {
+                        id: 'conjunction-5',
+                        type: 'sentence',
+                        question: '在句子 "She is tired because she worked hard." 中，连词是什么？',
+                        options: ['She', 'is', 'tired', 'because'],
+                        correct: 3,
+                        explanation: 'because（因为）是连词，连接原因状语从句。',
+                        rule: '从属连词（如because、if、when）连接主句和从句。'
+                    },
+                    {
+                        id: 'conjunction-6',
+                        type: 'identification',
+                        question: '下面哪个是选择连词？',
+                        options: ['and', 'but', 'or', 'because'],
+                        correct: 2,
+                        explanation: 'or（或者）是选择连词，表示选择关系。',
+                        rule: '选择连词表示选择关系，如or（或者）、either...or...（要么...要么...）。'
+                    },
+                    {
+                        id: 'conjunction-7',
+                        type: 'fill',
+                        question: '选择正确的连词填空：I will go to the park ______ it doesn\'t rain.',
+                        options: ['and', 'but', 'if', 'because'],
+                        correct: 2,
+                        explanation: 'if（如果）是连词，引导条件状语从句。',
+                        rule: 'if引导条件状语从句，表示"如果"。'
+                    },
+                    {
+                        id: 'conjunction-8',
+                        type: 'sentence',
+                        question: '在句子 "He is tall and strong." 中，连词是什么？',
+                        options: ['He', 'is', 'tall', 'and'],
+                        correct: 3,
+                        explanation: 'and（和）是连词，连接两个形容词tall和strong。',
+                        rule: '连词可以连接两个形容词，如"tall and strong"。'
+                    }
+                ]
+            },
+            {
+                id: 'modal',
+                name: '情态动词 (Modal Verb)',
+                icon: '🎭',
+                description: '表示能力、可能性、许可等',
+                examples: 'can（能）、may（可以）、must（必须）',
+                color: '#9D4EDD',
+                mastery: 0,
+                questions: [
+                    {
+                        id: 'modal-1',
+                        type: 'identification',
+                        question: '下面哪个单词是情态动词？',
+                        options: ['run', 'book', 'can', 'quickly'],
+                        correct: 2,
+                        explanation: 'can（能）是情态动词，表示能力。run（跑）是动词，book（书）是名词，quickly（快速地）是副词。',
+                        rule: '情态动词表示说话人的态度，如能力、可能性、许可、义务等。'
+                    },
+                    {
+                        id: 'modal-2',
+                        type: 'identification',
+                        question: '在句子 "You must finish your homework." 中，哪个词是情态动词？',
+                        options: ['You', 'must', 'finish', 'your'],
+                        correct: 1,
+                        explanation: 'must（必须）是情态动词，表示义务或必要性。',
+                        rule: '情态动词后面接动词原形，如"must finish"。'
+                    },
+                    {
+                        id: 'modal-3',
+                        type: 'fill',
+                        question: '请选择正确的情态动词填空：______ I use your pen?',
+                        options: ['Can', 'Run', 'Book', 'Quickly'],
+                        correct: 0,
+                        explanation: 'Can（可以）是情态动词，表示请求许可，符合句意"我可以用你的笔吗？"。',
+                        rule: 'can用于表示能力或许可，may用于表示更正式的许可。'
+                    },
+                    {
+                        id: 'modal-4',
+                        type: 'classification',
+                        question: '下面哪组词都是情态动词？',
+                        options: ['can, may, must', 'run, jump, swim', 'he, she, it', 'in, on, at'],
+                        correct: 0,
+                        explanation: 'can（能）、may（可以）、must（必须）都是情态动词。',
+                        rule: '常见的情态动词有can、could、may、might、must、should等。'
+                    },
+                    {
+                        id: 'modal-5',
+                        type: 'sentence',
+                        question: '在句子 "She should study harder." 中，情态动词是什么？',
+                        options: ['She', 'should', 'study', 'harder'],
+                        correct: 1,
+                        explanation: 'should（应该）是情态动词，表示建议或义务。',
+                        rule: '情态动词没有人称和数的变化，后面接动词原形。'
+                    },
+                    {
+                        id: 'modal-6',
+                        type: 'identification',
+                        question: '下面哪个表示可能性的情态动词？',
+                        options: ['can', 'may', 'must', 'should'],
+                        correct: 1,
+                        explanation: 'may（可能）表示可能性，如"It may rain."（可能会下雨）。',
+                        rule: 'may和might表示可能性，can表示能力或许可，must表示必须，should表示应该。'
+                    },
+                    {
+                        id: 'modal-7',
+                        type: 'fill',
+                        question: '选择正确的情态动词填空：You ______ not smoke here.',
+                        options: ['can', 'may', 'must', 'should'],
+                        correct: 2,
+                        explanation: 'must not（禁止）表示禁止，符合句意"你不可以在这里抽烟"。',
+                        rule: 'must not表示禁止，语气最强。'
+                    },
+                    {
+                        id: 'modal-8',
+                        type: 'sentence',
+                        question: '在句子 "He could run fast when he was young." 中，情态动词是什么？',
+                        options: ['He', 'could', 'run', 'fast'],
+                        correct: 1,
+                        explanation: 'could（能）是情态动词，表示过去的能力。',
+                        rule: 'could是can的过去式，表示过去的能力或可能性。'
+                    }
+                ]
+            }
+        ];
+
+        // 游戏状态
+        let gameState = {
+            currentSubject: '', // 'math', 'english', 'speech'
+            currentSpeechType: '', // 当前学习的词性
+            currentQuestionIndex: 0,
+            totalQuestions: 15, // 每日15题
+            correctCount: 0,
+            wrongCount: 0,
+            selectedOption: null,
+            practiceCompleted: false,
+            dailyQuestions: [], // 每日随机题目
+            userAnswers: {}, // 用户答案记录
+            todayDate: '',
+            currentSpeechQuestions: [] // 当前词性的题目
+        };
+
+        // 用户答题记录
+        let userProgress = {
+            mathQuestions: {}, // 记录数学题答题情况
+            speechTypes: {}, // 记录每个词性的答题情况
+            masteredQuestions: [], // 已攻克的题目ID
+            masteredSpeechTypes: [] // 已掌握的词性ID
+        };
+
+        // DOM元素
+        let mathBtn, englishBtn, backBtn, practiceArea, questionContainer, submitBtn, prevBtn, nextBtn;
+        let completionScreen, returnBtn, reviewBtn, speechSelection, partOfSpeechGrid;
+        
+        // 进度元素
+        let mathProgressValue, mathProgressFill, mathMastered, mathTotal;
+        let englishProgressValue, englishProgressFill, englishMastered, englishTotal;
+        let finalCorrect, finalTotal, finalAccuracy, finalMastered, completionTitle, completionMessage;
+
+        // 初始化
+        function init() {
+            // 获取DOM元素
+            mathBtn = document.getElementById('math-btn');
+            englishBtn = document.getElementById('english-btn');
+            backBtn = document.getElementById('back-btn');
+            practiceArea = document.getElementById('practice-area');
+            questionContainer = document.getElementById('question-container');
+            submitBtn = document.getElementById('submit-btn');
+            prevBtn = document.getElementById('prev-btn');
+            nextBtn = document.getElementById('next-btn');
+            completionScreen = document.getElementById('completion-screen');
+            returnBtn = document.getElementById('return-btn');
+            reviewBtn = document.getElementById('review-btn');
+            speechSelection = document.getElementById('speech-selection');
+            partOfSpeechGrid = document.getElementById('part-of-speech-grid');
+            
+            // 获取进度元素
+            mathProgressValue = document.getElementById('math-progress-value');
+            mathProgressFill = document.getElementById('math-progress-fill');
+            mathMastered = document.getElementById('math-mastered');
+            mathTotal = document.getElementById('math-total');
+            
+            englishProgressValue = document.getElementById('english-progress-value');
+            englishProgressFill = document.getElementById('english-progress-fill');
+            englishMastered = document.getElementById('english-mastered');
+            englishTotal = document.getElementById('english-total');
+            
+            finalCorrect = document.getElementById('final-correct');
+            finalTotal = document.getElementById('final-total');
+            finalAccuracy = document.getElementById('final-accuracy');
+            finalMastered = document.getElementById('final-mastered');
+            completionTitle = document.getElementById('completion-title');
+            completionMessage = document.getElementById('completion-message');
+            
+            // 检查是否是同一天
+            const today = new Date().toDateString();
+            const savedDate = localStorage.getItem('dailyPracticeDate');
+            
+            if (savedDate !== today) {
+                // 新的一天，重置每日进度
+                resetDailyProgress();
+                localStorage.setItem('dailyPracticeDate', today);
+            } else {
+                // 同一天，加载已保存的进度
+                loadDailyProgress();
+            }
+            
+            // 加载用户答题记录
+            loadUserProgress();
+            
+            // 更新进度显示
+            updateMathProgress();
+            updateEnglishProgress();
+            
+            // 绑定事件
+            bindEvents();
+        }
+
+        // localStorage 辅助函数，添加兼容性处理
+        function safeLocalStorageGet(key, defaultValue = null) {
+            try {
+                const value = localStorage.getItem(key);
+                return value ? JSON.parse(value) : defaultValue;
+            } catch (error) {
+                console.warn(`Failed to get ${key} from localStorage:`, error);
+                return defaultValue;
+            }
+        }
+
+        function safeLocalStorageSet(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (error) {
+                console.warn(`Failed to set ${key} in localStorage:`, error);
+                return false;
+            }
+        }
+
+        // 加载用户答题记录
+        function loadUserProgress() {
+            const saved = safeLocalStorageGet('userProgress', {
+                mathQuestions: {},
+                speechTypes: {},
+                masteredQuestions: [],
+                masteredSpeechTypes: []
+            });
+            userProgress = saved;
+        }
+
+        // 保存用户答题记录
+        function saveUserProgress() {
+            safeLocalStorageSet('userProgress', userProgress);
+        }
+
+        // 重置每日进度
+        function resetDailyProgress() {
+            gameState = {
+                currentSubject: '',
+                currentSpeechType: '',
+                currentQuestionIndex: 0,
+                totalQuestions: 15,
+                correctCount: 0,
+                wrongCount: 0,
+                selectedOption: null,
+                practiceCompleted: false,
+                dailyQuestions: [],
+                userAnswers: {},
+                todayDate: new Date().toDateString(),
+                currentSpeechQuestions: []
+            };
+            
+            saveDailyProgress();
+        }
+
+        // 加载每日进度
+        function loadDailyProgress() {
+            const saved = safeLocalStorageGet('dailyPracticeData');
+            if (saved && saved.todayDate === new Date().toDateString()) {
+                gameState = saved;
+            } else {
+                resetDailyProgress();
+            }
+        }
+
+        // 保存每日进度
+        function saveDailyProgress() {
+            safeLocalStorageSet('dailyPracticeData', gameState);
+        }
+
+        // 更新数学进度
+        function updateMathProgress() {
+            // 计算已攻克的题目数
+            const masteredCount = userProgress.masteredQuestions.length;
+            const totalQuestions = mathQuestions.length;
+            
+            mathMastered.textContent = masteredCount;
+            mathTotal.textContent = totalQuestions;
+            
+            const progress = (masteredCount / totalQuestions) * 100;
+            mathProgressValue.textContent = `${Math.round(progress)}%`;
+            mathProgressFill.style.width = `${progress}%`;
+        }
+
+        // 更新英语进度
+        function updateEnglishProgress() {
+            // 计算已掌握的词性数
+            const masteredCount = userProgress.masteredSpeechTypes.length;
+            const totalSpeechTypes = partOfSpeechData.length;
+            
+            englishMastered.textContent = masteredCount;
+            englishTotal.textContent = totalSpeechTypes;
+            
+            const progress = (masteredCount / totalSpeechTypes) * 100;
+            englishProgressValue.textContent = `${Math.round(progress)}%`;
+            englishProgressFill.style.width = `${progress}%`;
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // 科目按钮 - 添加触摸事件支持，提高跨平台兼容性
+            const addTouchSupport = (element, callback) => {
+                element.addEventListener('click', callback);
+                element.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); // 防止触摸事件触发默认行为
+                    callback();
+                });
+            };
+            
+            // 科目按钮
+            addTouchSupport(mathBtn, () => startPractice('math'));
+            addTouchSupport(englishBtn, showSpeechSelection);
+            
+            // 返回按钮
+            addTouchSupport(backBtn, returnToHome);
+            
+            // 提交答案按钮
+            addTouchSupport(submitBtn, submitAnswer);
+            
+            // 上一题/下一题按钮
+            addTouchSupport(prevBtn, previousQuestion);
+            addTouchSupport(nextBtn, nextQuestion);
+            
+            // 完成界面按钮
+            addTouchSupport(returnBtn, returnToHome);
+            addTouchSupport(reviewBtn, reviewWrongQuestions);
+        }
+
+        // 显示词性选择页面
+        function showSpeechSelection() {
+            // 隐藏主页面元素
+            document.querySelector('.subject-selection').style.display = 'none';
+            document.querySelector('.daily-goal').style.display = 'none';
+            document.querySelector('#math-progress').style.display = 'none';
+            document.querySelector('#english-progress').style.display = 'none';
+            
+            // 显示词性选择页面
+            speechSelection.style.display = 'flex';
+            backBtn.style.display = 'flex';
+            
+            // 创建词性卡片
+            createSpeechCards();
+        }
+
+        // 创建词性卡片
+        function createSpeechCards() {
+            partOfSpeechGrid.innerHTML = '';
+            
+            partOfSpeechData.forEach(speech => {
+                const card = document.createElement('div');
+                card.className = 'speech-card';
+                card.dataset.speechId = speech.id;
+                
+                // 检查是否已掌握
+                const isMastered = userProgress.masteredSpeechTypes.includes(speech.id);
+                const speechProgress = userProgress.speechTypes[speech.id] || { correct: 0, total: 0 };
+                const masteryPercent = speechProgress.total > 0 ? Math.round((speechProgress.correct / speechProgress.total) * 100) : 0;
+                const masteryText = isMastered ? '✓ 已掌握' : `掌握度: ${masteryPercent}%`;
+                
+                card.innerHTML = `
+                    <div class="speech-icon" style="background: ${speech.color}">${speech.icon}</div>
+                    <div class="speech-name">${speech.name}</div>
+                    <div class="speech-desc">${speech.description}</div>
+                    <div class="speech-mastery">${masteryText}</div>
+                `;
+                
+                card.addEventListener('click', () => startSpeechPractice(speech.id));
+                partOfSpeechGrid.appendChild(card);
+            });
+        }
+
+        // 开始数学练习
+        function startPractice(subject) {
+            gameState.currentSubject = subject;
+            gameState.currentQuestionIndex = 0;
+            gameState.selectedOption = null;
+            gameState.practiceCompleted = false;
+            
+            // 根据科目选择题目数量
+            const questionCount = 15; // 每日15题
+            gameState.totalQuestions = questionCount;
+            
+            // 获取题库
+            const questionBank = mathQuestions;
+            
+            // 每日随机选题（避免重复）
+            const allQuestionIds = questionBank.map(q => q.id);
+            const savedQuestions = safeLocalStorageGet('mathDailyQuestions', []);
+            const savedDate = safeLocalStorageGet('mathDailyQuestionsDate', '');
+            
+            let selectedIds;
+            
+            // 如果同一天已经生成过题目，使用已生成的题目
+            if (savedDate === new Date().toDateString() && savedQuestions.length === questionCount) {
+                selectedIds = savedQuestions;
+            } else {
+                // 新的一天，随机选择题目
+                selectedIds = getRandomQuestions(allQuestionIds, questionCount);
+                safeLocalStorageSet('mathDailyQuestions', selectedIds);
+                safeLocalStorageSet('mathDailyQuestionsDate', new Date().toDateString());
+            }
+            
+            // 根据ID获取题目
+            gameState.dailyQuestions = selectedIds.map(id => 
+                questionBank.find(q => q.id === id)
+            );
+            
+            gameState.userAnswers = {};
+            
+            // 显示练习区域
+            speechSelection.style.display = 'none';
+            practiceArea.style.display = 'flex';
+            backBtn.style.display = 'flex';
+            
+            // 加载第一题
+            loadQuestion(0);
+        }
+
+        // 开始词性练习
+        function startSpeechPractice(speechId) {
+            gameState.currentSubject = 'english';
+            gameState.currentSpeechType = speechId;
+            gameState.currentQuestionIndex = 0;
+            gameState.selectedOption = null;
+            gameState.practiceCompleted = false;
+            
+            // 获取当前词性的题目
+            const speech = partOfSpeechData.find(s => s.id === speechId);
+            gameState.currentSpeechQuestions = [...speech.questions]; // 创建副本
+            gameState.totalQuestions = Math.min(8, speech.questions.length); // 最多8题
+            
+            // 打乱题目顺序（但保持第一次的顺序一致）
+            const savedOrder = safeLocalStorageGet(`${speechId}_question_order`, null);
+            const savedDate = safeLocalStorageGet(`${speechId}_question_order_date`, '');
+            
+            if (savedOrder && savedDate === new Date().toDateString()) {
+                // 使用之前保存的顺序
+                gameState.currentSpeechQuestions = savedOrder.map(id => 
+                    gameState.currentSpeechQuestions.find(q => q.id === id)
+                ).filter(q => q); // 过滤掉可能不存在的题目
+            } else {
+                // 新的一天，随机排序
+                shuffleArray(gameState.currentSpeechQuestions);
+                safeLocalStorageSet(`${speechId}_question_order`, gameState.currentSpeechQuestions.map(q => q.id));
+                safeLocalStorageSet(`${speechId}_question_order_date`, new Date().toDateString());
+            }
+            
+            // 只取前8题
+            gameState.currentSpeechQuestions = gameState.currentSpeechQuestions.slice(0, gameState.totalQuestions);
+            
+            gameState.userAnswers = {};
+            
+            // 隐藏词性选择页面，显示练习区域
+            speechSelection.style.display = 'none';
+            practiceArea.style.display = 'flex';
+            backBtn.style.display = 'flex';
+            
+            // 加载第一题
+            loadSpeechQuestion(0);
+        }
+
+        // 随机选择题目
+        function getRandomQuestions(questionIds, count) {
+            // 复制数组以避免修改原数组
+            const shuffled = [...questionIds];
+            
+            // Fisher-Yates洗牌算法
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            // 返回前count个题目
+            return shuffled.slice(0, count);
+        }
+
+        // 随机打乱数组
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // 加载数学题目
+        function loadQuestion(index) {
+            if (index >= gameState.dailyQuestions.length) {
+                completePractice();
+                return;
+            }
+            
+            const question = gameState.dailyQuestions[index];
+            
+            // 获取该题的历史答题记录
+            const questionKey = `${gameState.currentSubject}-${question.id}`;
+            const questionHistory = userProgress.mathQuestions || {};
+            const history = questionHistory[question.id] || { correct: 0, total: 0 };
+            
+            // 构建题目HTML
+            let html = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-number">第 ${index + 1} 题</div>
+                        <div class="question-difficulty ${question.difficulty === 'easy' ? 'difficulty-easy' : question.difficulty === 'medium' ? 'difficulty-medium' : 'difficulty-hard'}">
+                            ${question.difficulty === 'easy' ? '简单' : question.difficulty === 'medium' ? '中等' : '困难'}
+                        </div>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    ${history.correct >= 3 ? '<div style="margin-bottom: 15px; color: var(--success-color); font-weight: 600;">✓ 已攻克此题</div>' : ''}
+                    <div class="options-container">
+            `;
+            
+            // 添加选项
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, i) => {
+                const isSelected = gameState.userAnswers[question.id] === i;
+                const optionClass = isSelected ? 'option-btn selected' : 'option-btn';
+                
+                html += `
+                    <div class="${optionClass}" data-index="${i}" onclick="selectOption(${i})">
+                        <div class="option-label">${optionLabels[i]}</div>
+                        <div class="option-text">${option}</div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    <div class="explanation-area" id="explanation-${question.id}">
+                        <div class="explanation-title">解题思路</div>
+                        <div class="explanation-text">${question.explanation}</div>
+                    </div>
+                </div>
+            `;
+            
+            questionContainer.innerHTML = html;
+            
+            // 隐藏解析
+            const explanationEl = document.getElementById(`explanation-${question.id}`);
+            if (explanationEl) {
+                explanationEl.style.display = 'none';
+            }
+            
+            // 更新按钮状态
+            updateButtonStates(index);
+            
+            // 保存当前题目索引
+            gameState.currentQuestionIndex = index;
+            gameState.selectedOption = gameState.userAnswers[question.id] || null;
+        }
+
+        // 加载词性题目
+        function loadSpeechQuestion(index) {
+            if (index >= gameState.currentSpeechQuestions.length) {
+                completePractice();
+                return;
+            }
+            
+            const question = gameState.currentSpeechQuestions[index];
+            const speech = partOfSpeechData.find(s => s.id === gameState.currentSpeechType);
+            
+            // 构建题目HTML
+            let html = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-number">第 ${index + 1} 题 / 共 ${gameState.totalQuestions} 题</div>
+                        <div class="question-type">${speech.name}</div>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-container">
+            `;
+            
+            // 添加选项
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, i) => {
+                const isSelected = gameState.userAnswers[question.id] === i;
+                const optionClass = isSelected ? 'option-btn selected' : 'option-btn';
+                
+                html += `
+                    <div class="${optionClass}" data-index="${i}" onclick="selectOption(${i})">
+                        <div class="option-label">${optionLabels[i]}</div>
+                        <div class="option-text">${option}</div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    <div class="explanation-area" id="explanation-${question.id}">
+                        <div class="explanation-title">📚 详细解析</div>
+                        <div class="explanation-text">${question.explanation}</div>
+                        <div style="margin-top: 15px; padding: 10px; background: rgba(255, 209, 102, 0.1); border-radius: 8px; border-left: 3px solid var(--warning-color);">
+                            <div style="color: #d6a214; font-weight: 600; margin-bottom: 5px;">💡 ${speech.name} 用法规则</div>
+                            <div style="color: var(--dark-color); font-size: 0.9rem;">${question.rule}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            questionContainer.innerHTML = html;
+            
+            // 隐藏解析
+            const explanationEl = document.getElementById(`explanation-${question.id}`);
+            if (explanationEl) {
+                explanationEl.style.display = 'none';
+            }
+            
+            // 更新按钮状态
+            updateButtonStates(index);
+            
+            // 保存当前题目索引
+            gameState.currentQuestionIndex = index;
+            gameState.selectedOption = gameState.userAnswers[question.id] || null;
+        }
+
+        // 选择选项
+        function selectOption(index) {
+            // 如果已经提交过答案，不允许重新选择
+            let currentQuestion;
+            if (gameState.currentSubject === 'math') {
+                currentQuestion = gameState.dailyQuestions[gameState.currentQuestionIndex];
+            } else {
+                currentQuestion = gameState.currentSpeechQuestions[gameState.currentQuestionIndex];
+            }
+            
+            if (currentQuestion && currentQuestion.userAnswered) return;
+            
+            // 清除之前的选择
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 标记当前选择
+            const selectedBtn = document.querySelector(`[data-index="${index}"]`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('selected');
+            }
+            
+            gameState.selectedOption = index;
+            gameState.userAnswers[currentQuestion.id] = index;
+        }
+
+        // 提交答案
+        function submitAnswer() {
+            let question;
+            if (gameState.currentSubject === 'math') {
+                question = gameState.dailyQuestions[gameState.currentQuestionIndex];
+            } else {
+                question = gameState.currentSpeechQuestions[gameState.currentQuestionIndex];
+            }
+            
+            if (gameState.selectedOption === null) {
+                alert('请先选择一个答案');
+                return;
+            }
+            
+            // 标记题目已回答
+            question.userAnswered = true;
+            
+            // 显示所有选项的正确/错误状态
+            document.querySelectorAll('.option-btn').forEach((btn, i) => {
+                if (i === question.correct) {
+                    btn.classList.add('correct');
+                } else if (i === gameState.selectedOption && i !== question.correct) {
+                    btn.classList.add('wrong');
+                }
+            });
+            
+            // 显示解析
+            const explanationEl = document.getElementById(`explanation-${question.id}`);
+            if (explanationEl) {
+                explanationEl.style.display = 'block';
+                explanationEl.classList.add('show');
+            }
+            
+            // 更新统计
+            const isCorrect = gameState.selectedOption === question.correct;
+            if (isCorrect) {
+                gameState.correctCount++;
+            } else {
+                gameState.wrongCount++;
+            }
+            
+            // 更新用户答题记录
+            if (gameState.currentSubject === 'math') {
+                updateMathQuestionHistory(question.id, isCorrect);
+                // 检查是否攻克此题
+                checkIfMastered(question.id);
+                // 更新数学进度
+                updateMathProgress();
+            } else {
+                updateSpeechHistory(isCorrect);
+                // 更新英语进度
+                updateEnglishProgress();
+            }
+            
+            // 保存进度
+            saveDailyProgress();
+            saveUserProgress();
+            
+            // 更新按钮状态
+            submitBtn.style.display = 'none';
+            nextBtn.style.display = 'flex';
+            
+            // 如果是最后一题，修改按钮文字
+            if (gameState.currentQuestionIndex === (gameState.currentSubject === 'math' ? gameState.dailyQuestions.length : gameState.currentSpeechQuestions.length) - 1) {
+                nextBtn.innerHTML = '完成练习 <i class="fas fa-flag-checkered"></i>';
+            }
+        }
+
+        // 更新数学题目历史记录
+        function updateMathQuestionHistory(questionId, isCorrect) {
+            // 初始化数据结构
+            if (!userProgress.mathQuestions) {
+                userProgress.mathQuestions = {};
+            }
+            
+            if (!userProgress.mathQuestions[questionId]) {
+                userProgress.mathQuestions[questionId] = { correct: 0, total: 0 };
+            }
+            
+            // 更新记录
+            userProgress.mathQuestions[questionId].total++;
+            if (isCorrect) {
+                userProgress.mathQuestions[questionId].correct++;
+            } else {
+                // 如果答错，重置正确次数（需要连续3次正确）
+                userProgress.mathQuestions[questionId].correct = 0;
+            }
+        }
+
+        // 更新词性历史记录
+        function updateSpeechHistory(isCorrect) {
+            const speechId = gameState.currentSpeechType;
+            
+            // 更新该词性的答题记录
+            if (!userProgress.speechTypes) {
+                userProgress.speechTypes = {};
+            }
+            
+            if (!userProgress.speechTypes[speechId]) {
+                userProgress.speechTypes[speechId] = { correct: 0, total: 0 };
+            }
+            
+            userProgress.speechTypes[speechId].total++;
+            if (isCorrect) {
+                userProgress.speechTypes[speechId].correct++;
+            }
+            
+            // 计算正确率
+            const correctRate = (userProgress.speechTypes[speechId].correct / userProgress.speechTypes[speechId].total) * 100;
+            
+            // 如果正确率达到80%且总答题数达到8次，标记为已掌握
+            if (correctRate >= 80 && userProgress.speechTypes[speechId].total >= 8) {
+                if (!userProgress.masteredSpeechTypes.includes(speechId)) {
+                    userProgress.masteredSpeechTypes.push(speechId);
+                    
+                    // 显示攻克提示
+                    const questionCard = document.querySelector('.question-card');
+                    if (questionCard) {
+                        const masteryMsg = document.createElement('div');
+                        masteryMsg.style.cssText = 'margin-top: 15px; padding: 10px; background: rgba(78, 205, 196, 0.2); color: var(--success-color); border-radius: 8px; font-weight: 600;';
+                        masteryMsg.textContent = '🎉 恭喜！此词性已被掌握！';
+                        questionCard.insertBefore(masteryMsg, questionCard.querySelector('.explanation-area'));
+                    }
+                }
+            }
+        }
+
+        // 检查是否攻克此题
+        function checkIfMastered(questionId) {
+            if (userProgress.mathQuestions && userProgress.mathQuestions[questionId]) {
+                const history = userProgress.mathQuestions[questionId];
+                
+                // 如果正确次数达到3次，标记为已攻克
+                if (history.correct >= 3 && !userProgress.masteredQuestions.includes(questionId)) {
+                    userProgress.masteredQuestions.push(questionId);
+                    
+                    // 显示攻克提示
+                    const questionCard = document.querySelector('.question-card');
+                    if (questionCard) {
+                        const masteryMsg = document.createElement('div');
+                        masteryMsg.style.cssText = 'margin-top: 15px; padding: 10px; background: rgba(78, 205, 196, 0.2); color: var(--success-color); border-radius: 8px; font-weight: 600;';
+                        masteryMsg.textContent = '🎉 恭喜！此题已被攻克！';
+                        questionCard.insertBefore(masteryMsg, questionCard.querySelector('.explanation-area'));
+                    }
+                }
+            }
+        }
+
+        // 更新按钮状态
+        function updateButtonStates(index) {
+            // 上一题按钮
+            prevBtn.disabled = index === 0;
+            
+            // 提交/下一题按钮
+            let question;
+            if (gameState.currentSubject === 'math') {
+                question = gameState.dailyQuestions[index];
+            } else {
+                question = gameState.currentSpeechQuestions[index];
+            }
+            
+            const isAnswered = question && question.userAnswered;
+            
+            if (isAnswered) {
+                submitBtn.style.display = 'none';
+                nextBtn.style.display = 'flex';
+                
+                // 显示解析
+                if (question) {
+                    const explanation = document.getElementById(`explanation-${question.id}`);
+                    if (explanation) {
+                        explanation.style.display = 'block';
+                        explanation.classList.add('show');
+                    }
+                }
+            } else {
+                submitBtn.style.display = 'flex';
+                nextBtn.style.display = 'none';
+            }
+            
+            // 如果是最后一题且已回答，修改下一题按钮文字
+            const totalQuestions = gameState.currentSubject === 'math' ? gameState.dailyQuestions.length : gameState.currentSpeechQuestions.length;
+            if (index === totalQuestions - 1 && isAnswered) {
+                nextBtn.innerHTML = '完成练习 <i class="fas fa-flag-checkered"></i>';
+            }
+        }
+
+        // 上一题
+        function previousQuestion() {
+            if (gameState.currentQuestionIndex > 0) {
+                gameState.currentQuestionIndex--;
+                if (gameState.currentSubject === 'math') {
+                    loadQuestion(gameState.currentQuestionIndex);
+                } else {
+                    loadSpeechQuestion(gameState.currentQuestionIndex);
+                }
+            }
+        }
+
+        // 下一题
+        function nextQuestion() {
+            const totalQuestions = gameState.currentSubject === 'math' ? gameState.dailyQuestions.length : gameState.currentSpeechQuestions.length;
+            
+            if (gameState.currentQuestionIndex < totalQuestions - 1) {
+                gameState.currentQuestionIndex++;
+                if (gameState.currentSubject === 'math') {
+                    loadQuestion(gameState.currentQuestionIndex);
+                } else {
+                    loadSpeechQuestion(gameState.currentQuestionIndex);
+                }
+            } else {
+                completePractice();
+            }
+        }
+
+        // 完成练习
+        function completePractice() {
+            gameState.practiceCompleted = true;
+            
+            // 计算统计
+            const total = gameState.totalQuestions;
+            const correct = gameState.correctCount;
+            const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+            
+            // 根据科目设置不同的消息
+            if (gameState.currentSubject === 'math') {
+                // 计算今日攻克的题目数
+                let todayMastered = 0;
+                gameState.dailyQuestions.forEach(question => {
+                    if (userProgress.masteredQuestions.includes(question.id)) {
+                        todayMastered++;
+                    }
+                });
+                
+                // 更新完成界面
+                finalCorrect.textContent = correct;
+                finalTotal.textContent = total;
+                finalAccuracy.textContent = `${accuracy}%`;
+                finalMastered.textContent = `${todayMastered}题`;
+                
+                // 根据表现设置不同的消息
+                if (accuracy >= 90) {
+                    completionTitle.textContent = '太棒了！数学小天才！';
+                    completionMessage.textContent = `正确率${accuracy}%，你简直是数学大师！`;
+                } else if (accuracy >= 70) {
+                    completionTitle.textContent = '做得非常好！';
+                    completionMessage.textContent = `正确率${accuracy}%，你的数学能力很不错！`;
+                } else if (accuracy >= 50) {
+                    completionTitle.textContent = '继续加油！';
+                    completionMessage.textContent = `正确率${accuracy}%，每天进步一点点！`;
+                } else {
+                    completionTitle.textContent = '坚持就是胜利！';
+                    completionMessage.textContent = `正确率${accuracy}%，多练习一定会更好！`;
+                }
+            } else {
+                // 英语词性练习
+                const speechId = gameState.currentSpeechType;
+                const speech = partOfSpeechData.find(s => s.id === speechId);
+                const isMastered = userProgress.masteredSpeechTypes.includes(speechId);
+                
+                // 更新完成界面
+                finalCorrect.textContent = correct;
+                finalTotal.textContent = total;
+                finalAccuracy.textContent = `${accuracy}%`;
+                finalMastered.textContent = isMastered ? '已掌握' : '继续努力';
+                
+                // 根据表现设置不同的消息
+                if (accuracy >= 90) {
+                    completionTitle.textContent = '太棒了！词性小专家！';
+                    completionMessage.textContent = `正确率${accuracy}%，你已经掌握了${speech.name}的用法！`;
+                } else if (accuracy >= 70) {
+                    completionTitle.textContent = '做得非常好！';
+                    completionMessage.textContent = `正确率${accuracy}%，你对${speech.name}的理解很不错！`;
+                } else if (accuracy >= 50) {
+                    completionTitle.textContent = '继续加油！';
+                    completionMessage.textContent = `正确率${accuracy}%，再多练习几次就能掌握${speech.name}了！`;
+                } else {
+                    completionTitle.textContent = '坚持就是胜利！';
+                    completionMessage.textContent = `正确率${accuracy}%，多练习一定会更好！记得查看每道题的详细解析哦！`;
+                }
+            }
+            
+            // 显示完成界面
+            practiceArea.style.display = 'none';
+            completionScreen.style.display = 'flex';
+            
+            // 保存最终进度
+            saveDailyProgress();
+            saveUserProgress();
+        }
+
+        // 返回首页
+        function returnToHome() {
+            // 隐藏所有界面
+            practiceArea.style.display = 'none';
+            completionScreen.style.display = 'none';
+            speechSelection.style.display = 'none';
+            backBtn.style.display = 'none';
+            
+            // 显示主页面元素
+            document.querySelector('.subject-selection').style.display = 'flex';
+            document.querySelector('.daily-goal').style.display = 'flex';
+            document.querySelector('#math-progress').style.display = 'block';
+            document.querySelector('#english-progress').style.display = 'block';
+            
+            // 重置游戏状态（但不重置每日进度）
+            gameState.currentSubject = '';
+            gameState.currentSpeechType = '';
+            gameState.currentQuestionIndex = 0;
+            gameState.selectedOption = null;
+            
+            // 更新进度显示
+            updateMathProgress();
+            updateEnglishProgress();
+        }
+
+        // 复习错题
+        function reviewWrongQuestions() {
+            // 收集错题
+            const wrongQuestions = [];
+            
+            let questions;
+            if (gameState.currentSubject === 'math') {
+                questions = gameState.dailyQuestions;
+            } else {
+                questions = gameState.currentSpeechQuestions;
+            }
+            
+            questions.forEach((question, index) => {
+                const userAnswer = gameState.userAnswers[question.id];
+                if (userAnswer !== undefined && userAnswer !== question.correct) {
+                    wrongQuestions.push({
+                        question: question,
+                        index: index + 1
+                    });
+                }
+            });
+            
+            if (wrongQuestions.length === 0) {
+                alert('恭喜！没有错题需要复习！');
+                returnToHome();
+                return;
+            }
+            
+            // 重置游戏状态，只练习错题
+            if (gameState.currentSubject === 'math') {
+                gameState.dailyQuestions = wrongQuestions.map(item => item.question);
+                gameState.totalQuestions = wrongQuestions.length;
+            } else {
+                gameState.currentSpeechQuestions = wrongQuestions.map(item => item.question);
+                gameState.totalQuestions = wrongQuestions.length;
+            }
+            
+            gameState.currentQuestionIndex = 0;
+            gameState.selectedOption = null;
+            gameState.practiceCompleted = false;
+            
+            // 重置用户答案（允许重新回答）
+            gameState.userAnswers = {};
+            if (gameState.currentSubject === 'math') {
+                gameState.dailyQuestions.forEach(q => {
+                    q.userAnswered = false;
+                });
+            } else {
+                gameState.currentSpeechQuestions.forEach(q => {
+                    q.userAnswered = false;
+                });
+            }
+            
+            // 重置正确/错误计数
+            gameState.correctCount = 0;
+            gameState.wrongCount = 0;
+            
+            // 显示练习区域
+            completionScreen.style.display = 'none';
+            practiceArea.style.display = 'flex';
+            
+            // 加载第一题
+            if (gameState.currentSubject === 'math') {
+                loadQuestion(0);
+            } else {
+                loadSpeechQuestion(0);
+            }
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // 使函数在全局可访问（用于HTML中的onclick）
+        window.selectOption = selectOption;
+    </script>
+    
+    <!-- Font Awesome 图标 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
